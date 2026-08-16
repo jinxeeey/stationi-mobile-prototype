@@ -616,6 +616,199 @@
     #stationi-ui-concept .stationi-phone .stationi-bay,
     #stationi-ui-concept .stationi-phone .stationi-chip { cursor: pointer; }
 
+    #stationi-ui-concept .stationi-screen-grid {
+      position: relative;
+      perspective: 1400px;
+    }
+
+    #stationi-ui-concept .stationi-frame {
+      transform-origin: 50% 24%;
+      backface-visibility: hidden;
+      will-change: transform, opacity, filter;
+    }
+
+    #stationi-ui-concept .stationi-frame.is-enter-forward {
+      animation: stationi-screen-enter-forward .38s cubic-bezier(.22, 1, .36, 1) both;
+    }
+
+    #stationi-ui-concept .stationi-frame.is-enter-backward {
+      animation: stationi-screen-enter-backward .38s cubic-bezier(.22, 1, .36, 1) both;
+    }
+
+    #stationi-ui-concept .stationi-frame.is-enter-jump {
+      animation: stationi-theme-enter .3s cubic-bezier(.22, 1, .36, 1) both;
+    }
+
+    #stationi-ui-concept .stationi-frame.is-exit-forward,
+    #stationi-ui-concept .stationi-frame.is-exit-backward,
+    #stationi-ui-concept .stationi-frame.is-exit-jump,
+    #stationi-ui-concept .stationi-frame.is-theme-exit {
+      position: absolute;
+      inset: 0;
+      z-index: 3;
+      width: 100%;
+      pointer-events: none;
+    }
+
+    #stationi-ui-concept .stationi-frame.is-exit-forward {
+      animation: stationi-screen-exit-forward .28s cubic-bezier(.4, 0, 1, 1) both;
+    }
+
+    #stationi-ui-concept .stationi-frame.is-exit-backward {
+      animation: stationi-screen-exit-backward .28s cubic-bezier(.4, 0, 1, 1) both;
+    }
+
+    #stationi-ui-concept .stationi-frame.is-exit-jump {
+      animation: stationi-theme-exit .2s ease both;
+    }
+
+    #stationi-ui-concept .stationi-frame.is-theme-enter {
+      animation: stationi-theme-enter .32s cubic-bezier(.22, 1, .36, 1) both;
+    }
+
+    #stationi-ui-concept .stationi-frame.is-theme-exit {
+      animation: stationi-theme-exit .22s ease both;
+    }
+
+    #stationi-ui-concept .stationi-phone button,
+    #stationi-ui-concept .stationi-phone .stationi-card,
+    #stationi-ui-concept .stationi-phone .stationi-parking-row,
+    #stationi-ui-concept .stationi-phone .stationi-menu-row,
+    #stationi-ui-concept .stationi-phone .stationi-bay,
+    #stationi-ui-concept .stationi-phone .stationi-chip,
+    #stationi-ui-concept .stationi-phone .stationi-pin {
+      -webkit-tap-highlight-color: transparent;
+      transition: transform .2s cubic-bezier(.22, 1, .36, 1),
+                  border-color .2s ease,
+                  background-color .2s ease,
+                  color .2s ease,
+                  box-shadow .2s ease,
+                  filter .2s ease,
+                  opacity .2s ease;
+    }
+
+    #stationi-ui-concept .stationi-primary svg,
+    #stationi-ui-concept .stationi-icon-button svg,
+    #stationi-ui-concept .stationi-nav button svg,
+    #stationi-ui-concept .stationi-stars button svg {
+      transition: transform .2s cubic-bezier(.22, 1, .36, 1), fill .2s ease;
+    }
+
+    #stationi-ui-concept .stationi-toggle,
+    #stationi-ui-concept .stationi-toggle::after {
+      transition: background-color .24s ease, transform .28s cubic-bezier(.22, 1, .36, 1), box-shadow .2s ease;
+    }
+
+    #stationi-ui-concept .stationi-phone button:active,
+    #stationi-ui-concept .stationi-phone .stationi-card:active,
+    #stationi-ui-concept .stationi-phone .stationi-parking-row:active,
+    #stationi-ui-concept .stationi-phone .stationi-menu-row:active,
+    #stationi-ui-concept .stationi-phone .stationi-bay:not(.busy):active,
+    #stationi-ui-concept .stationi-phone .stationi-chip:active,
+    #stationi-ui-concept .stationi-phone .stationi-pin:active {
+      transform: translateY(1px) scale(.985);
+      transition-duration: .08s;
+    }
+
+    #stationi-ui-concept .stationi-phone .stationi-pin:active {
+      transform: translate(-50%, calc(-100% + 1px)) scale(.985);
+    }
+
+    #stationi-ui-concept :is(button, select, input):focus-visible {
+      outline: 3px solid color-mix(in srgb, var(--stationi-purple) 48%, transparent);
+      outline-offset: 3px;
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+      #stationi-ui-concept .prototype-control:hover,
+      #stationi-ui-concept .btn:hover {
+        transform: translateY(-1px);
+        border-color: rgba(184,166,232,.72);
+        box-shadow: 0 9px 24px rgba(8,6,12,.24);
+      }
+
+      #stationi-ui-concept .stationi-primary:hover {
+        transform: translateY(-2px);
+        filter: saturate(1.08) brightness(1.04);
+        box-shadow: 0 13px 28px rgba(115,94,169,.34);
+      }
+
+      #stationi-ui-concept .stationi-primary:hover svg { transform: translateX(3px); }
+
+      #stationi-ui-concept .stationi-secondary:hover,
+      #stationi-ui-concept .stationi-ghost:hover {
+        transform: translateY(-1px);
+        color: var(--stationi-purple);
+        background: color-mix(in srgb, var(--stationi-purple-soft) 58%, var(--stationi-surface-raised));
+      }
+
+      #stationi-ui-concept .stationi-icon-button:hover {
+        transform: translateY(-2px) scale(1.03);
+        color: var(--stationi-purple);
+        box-shadow: 0 12px 28px rgba(12,10,18,.16);
+      }
+
+      #stationi-ui-concept .stationi-icon-button:hover svg { transform: rotate(-5deg) scale(1.04); }
+
+      #stationi-ui-concept .stationi-card:hover,
+      #stationi-ui-concept .stationi-parking-row:hover,
+      #stationi-ui-concept .stationi-menu-row:hover {
+        transform: translateY(-2px);
+        border-color: color-mix(in srgb, var(--stationi-purple) 36%, var(--stationi-border));
+        box-shadow: 0 12px 28px rgba(12,10,18,.11);
+      }
+
+      #stationi-ui-concept[data-theme="dark"] .stationi-card:hover,
+      #stationi-ui-concept[data-theme="dark"] .stationi-parking-row:hover,
+      #stationi-ui-concept[data-theme="dark"] .stationi-menu-row:hover {
+        box-shadow: 0 14px 34px rgba(0,0,0,.26);
+      }
+
+      #stationi-ui-concept .stationi-chip:hover {
+        transform: translateY(-1px);
+        color: var(--stationi-purple);
+        border-color: color-mix(in srgb, var(--stationi-purple) 45%, transparent);
+      }
+
+      #stationi-ui-concept .stationi-bay:not(.busy):hover { transform: translateY(-2px) scale(1.035); }
+      #stationi-ui-concept .stationi-pin:hover { transform: translate(-50%, calc(-100% - 4px)) scale(1.045); filter: brightness(1.06); }
+      #stationi-ui-concept .stationi-pin:hover:active { transform: translate(-50%, calc(-100% + 1px)) scale(.985); }
+      #stationi-ui-concept .stationi-stars button:hover { transform: translateY(-3px) rotate(-4deg) scale(1.08); }
+      #stationi-ui-concept .stationi-nav button:hover { transform: translateY(-2px); color: var(--stationi-purple); }
+      #stationi-ui-concept .stationi-nav button:hover svg { transform: scale(1.08); }
+      #stationi-ui-concept .stationi-toggle:hover { box-shadow: 0 0 0 4px color-mix(in srgb, var(--stationi-purple) 12%, transparent); }
+    }
+
+    @keyframes stationi-screen-enter-forward {
+      from { opacity: 0; transform: translate3d(34px, 0, 0) scale(.985); filter: blur(3px); }
+      to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); filter: blur(0); }
+    }
+
+    @keyframes stationi-screen-exit-forward {
+      from { opacity: 1; transform: translate3d(0, 0, 0) scale(1); filter: blur(0); }
+      to { opacity: 0; transform: translate3d(-22px, 0, 0) scale(.99); filter: blur(2px); }
+    }
+
+    @keyframes stationi-screen-enter-backward {
+      from { opacity: 0; transform: translate3d(-34px, 0, 0) scale(.985); filter: blur(3px); }
+      to { opacity: 1; transform: translate3d(0, 0, 0) scale(1); filter: blur(0); }
+    }
+
+    @keyframes stationi-screen-exit-backward {
+      from { opacity: 1; transform: translate3d(0, 0, 0) scale(1); filter: blur(0); }
+      to { opacity: 0; transform: translate3d(22px, 0, 0) scale(.99); filter: blur(2px); }
+    }
+
+    @keyframes stationi-theme-enter {
+      from { opacity: 0; transform: scale(.992); filter: saturate(.85); }
+      to { opacity: 1; transform: scale(1); filter: saturate(1); }
+    }
+
+    @keyframes stationi-theme-exit {
+      from { opacity: 1; transform: scale(1); }
+      to { opacity: 0; transform: scale(1.008); }
+    }
+
     #stationi-ui-concept .prototype-toast {
       position: fixed;
       left: 50%;
@@ -639,6 +832,17 @@
     #stationi-ui-concept .prototype-toast.show { opacity: 1; transform: translate(-50%, 0); }
     #stationi-ui-concept .stationi-stars button.selected { color: var(--stationi-purple); }
     #stationi-ui-concept .stationi-stars button.selected svg { fill: currentColor; }
+
+    @media (prefers-reduced-motion: reduce) {
+      #stationi-ui-concept *,
+      #stationi-ui-concept *::before,
+      #stationi-ui-concept *::after {
+        scroll-behavior: auto !important;
+        animation-duration: .001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .001ms !important;
+      }
+    }
 
     @media (max-width: 720px) {
       #stationi-ui-concept { padding: 8px 6px 24px; }
@@ -845,9 +1049,11 @@
         toastTimer = setTimeout(() => toastElement.classList.remove("show"), 1900);
       };
 
-      const render = () => {
+      const motionIsReduced = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      const render = (motionClass = "") => {
         const screen = screens[currentIndex];
-        grid.innerHTML = `<article class="stationi-frame"><div class="stationi-frame-label"><strong>${String(currentIndex + 1).padStart(2, "0")}. ${screen.title}</strong><span>${root.dataset.theme === "dark" ? "Sombre" : "Clair"}</span></div><section class="stationi-phone ${screen.noNav ? "no-nav" : ""}" data-screen-slug="${screen.slug}" aria-label="Écran ${screen.title} en mode ${root.dataset.theme === "dark" ? "sombre" : "clair"}">${status()}${screen.body()}</section></article>`;
+        grid.innerHTML = `<article class="stationi-frame${motionClass ? ` ${motionClass}` : ""}"><div class="stationi-frame-label"><strong>${String(currentIndex + 1).padStart(2, "0")}. ${screen.title}</strong><span>${root.dataset.theme === "dark" ? "Sombre" : "Clair"}</span></div><section class="stationi-phone ${screen.noNav ? "no-nav" : ""}" data-screen-slug="${screen.slug}" aria-label="Écran ${screen.title} en mode ${root.dataset.theme === "dark" ? "sombre" : "clair"}">${status()}${screen.body()}</section></article>`;
         picker.value = String(currentIndex);
         previousButton.disabled = currentIndex === 0 && history.length === 0;
         nextButton.disabled = currentIndex === screens.length - 1;
@@ -855,13 +1061,37 @@
         document.title = `${String(currentIndex + 1).padStart(2, "0")} · ${screen.title} — STATIONI`;
       };
 
+      const renderWithMotion = (motion = "forward") => {
+        if (motionIsReduced()) {
+          render();
+          return;
+        }
+
+        const activeFrame = grid.querySelector(".stationi-frame:not([aria-hidden='true'])");
+        const outgoingFrame = activeFrame?.cloneNode(true);
+        render(`is-enter-${motion}`);
+
+        if (!outgoingFrame) return;
+        outgoingFrame.className = `stationi-frame is-exit-${motion}`;
+        outgoingFrame.setAttribute("aria-hidden", "true");
+        outgoingFrame.querySelectorAll("[id]").forEach((element) => element.removeAttribute("id"));
+        if ("inert" in outgoingFrame) outgoingFrame.inert = true;
+        grid.appendChild(outgoingFrame);
+
+        const removeOutgoing = () => outgoingFrame.remove();
+        outgoingFrame.addEventListener("animationend", removeOutgoing, { once: true });
+        setTimeout(removeOutgoing, 480);
+      };
+
       const navigate = (index, push = true) => {
         const nextIndex = Math.max(0, Math.min(screens.length - 1, Number(index)));
         if (nextIndex === currentIndex) return;
         if (push) history.push(currentIndex);
+        const distance = Math.abs(nextIndex - currentIndex);
+        const motion = distance > 2 ? "jump" : nextIndex > currentIndex ? "forward" : "backward";
         currentIndex = nextIndex;
-        render();
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        renderWithMotion(motion);
+        window.scrollTo({ top: 0, behavior: motionIsReduced() ? "auto" : "smooth" });
       };
 
       const goBack = () => {
@@ -870,6 +1100,7 @@
       };
 
       const applyTheme = (theme, persist = true) => {
+        const hasRenderedScreen = Boolean(grid.querySelector(".stationi-frame"));
         root.dataset.theme = theme;
         root.querySelectorAll("[data-stationi-theme]").forEach((candidate) => {
           const active = candidate.dataset.stationiTheme === theme;
@@ -877,7 +1108,8 @@
           candidate.classList.toggle("btn-primary", active);
         });
         if (persist) localStorage.setItem("stationi-theme", theme);
-        render();
+        if (hasRenderedScreen && !motionIsReduced()) render("is-theme-enter");
+        else render();
       };
 
       const sessionDestination = () => {
