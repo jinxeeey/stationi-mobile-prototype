@@ -1,0 +1,1072 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0B0910">
+  <title>STATIONI — Prototype mobile</title>
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <script src="/stationi/lucide.js"></script>
+  <style>
+    html, body { min-height: 100%; margin: 0; background: #08080A; }
+    body { overflow-x: hidden; }
+    button, input, select { font: inherit; }
+  </style>
+</head>
+<body>
+<div id="stationi-ui-concept" data-theme="light">
+  <style>
+    #stationi-ui-concept {
+      --stationi-purple: #735EA9;
+      --stationi-purple-deep: #5C478E;
+      --stationi-purple-soft: #E8E1F6;
+      --stationi-canvas: #F7F6FA;
+      --stationi-surface: #FFFFFF;
+      --stationi-surface-raised: #F1EEF6;
+      --stationi-text: #111016;
+      --stationi-text-2: #65606D;
+      --stationi-text-3: #77717F;
+      --stationi-border: #E5E1EA;
+      --stationi-border-strong: #8D8698;
+      --stationi-mark-main: #111016;
+      --stationi-green: #137A55;
+      --stationi-green-soft: #E2F2EC;
+      --stationi-amber: #9A5B00;
+      --stationi-amber-soft: #FFF0D7;
+      --stationi-red: #B73542;
+      --stationi-red-soft: #FBE5E8;
+      --stationi-blue: #2D64C8;
+      --stationi-map-filter: grayscale(.30) saturate(.72) brightness(1.05);
+      --stationi-shadow: 0 18px 50px rgba(12, 10, 18, .12);
+      font-family: Inter, Arial, sans-serif;
+      color: var(--stationi-text);
+      width: 100%;
+    }
+
+    #stationi-ui-concept[data-theme="dark"] {
+      --stationi-purple-soft: #2B2140;
+      --stationi-canvas: #0B0910;
+      --stationi-surface: #14111A;
+      --stationi-surface-raised: #1D1925;
+      --stationi-text: #FAF9FC;
+      --stationi-text-2: #B9B2C2;
+      --stationi-text-3: #91899C;
+      --stationi-border: #302A3A;
+      --stationi-border-strong: #71697E;
+      --stationi-mark-main: #FFFFFF;
+      --stationi-green: #6FDCB2;
+      --stationi-green-soft: #15352B;
+      --stationi-amber: #FFC46B;
+      --stationi-amber-soft: #3B2A10;
+      --stationi-red: #FF8891;
+      --stationi-red-soft: #3B1A20;
+      --stationi-blue: #78A9FF;
+      --stationi-map-filter: invert(.88) hue-rotate(178deg) saturate(.50) brightness(.52) contrast(1.22);
+      --stationi-shadow: 0 20px 55px rgba(0, 0, 0, .38);
+    }
+
+    #stationi-ui-concept *,
+    #stationi-ui-concept *::before,
+    #stationi-ui-concept *::after { box-sizing: border-box; }
+
+    #stationi-ui-concept .stationi-gallery-tools {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin: 0 0 20px;
+    }
+
+    #stationi-ui-concept .stationi-gallery-heading {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: var(--foreground);
+      font-weight: 500;
+    }
+
+    #stationi-ui-concept .stationi-gallery-heading svg { color: #735EA9; }
+    #stationi-ui-concept .stationi-mode-controls { display: flex; gap: 8px; }
+    #stationi-ui-concept .stationi-screen-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(min(390px, 100%), 1fr));
+      gap: 30px 22px;
+      align-items: start;
+    }
+
+    #stationi-ui-concept .stationi-frame {
+      min-width: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    #stationi-ui-concept .stationi-frame-label {
+      width: min(390px, 100%);
+      display: flex;
+      justify-content: space-between;
+      color: var(--foreground);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: .02em;
+    }
+
+    #stationi-ui-concept .stationi-frame-label span { color: var(--muted-foreground); }
+
+    #stationi-ui-concept .stationi-phone {
+      position: relative;
+      width: min(390px, 100%);
+      height: 844px;
+      overflow: hidden;
+      border-radius: 42px;
+      border: 1px solid var(--stationi-border);
+      background: var(--stationi-canvas);
+      color: var(--stationi-text);
+      box-shadow: var(--stationi-shadow);
+      font-size: 14px;
+      line-height: 1.35;
+      isolation: isolate;
+    }
+
+    #stationi-ui-concept .stationi-phone button,
+    #stationi-ui-concept .stationi-phone input {
+      font: inherit;
+    }
+
+    #stationi-ui-concept .stationi-status {
+      position: absolute;
+      inset: 0 0 auto;
+      height: 30px;
+      padding: 9px 24px 0;
+      z-index: 20;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      color: var(--stationi-text);
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .01em;
+      pointer-events: none;
+    }
+
+    #stationi-ui-concept .stationi-status-icons { display: flex; align-items: center; gap: 5px; }
+    #stationi-ui-concept .stationi-status-icons i { width: 13px; height: 13px; }
+
+    #stationi-ui-concept .stationi-main {
+      position: absolute;
+      inset: 30px 0 74px;
+      overflow: hidden;
+    }
+
+    #stationi-ui-concept .stationi-phone.no-nav .stationi-main { bottom: 0; }
+
+    #stationi-ui-concept .stationi-scroll {
+      height: 100%;
+      padding: 14px 20px 24px;
+      overflow: hidden;
+    }
+
+    #stationi-ui-concept .stationi-app-header {
+      min-height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    #stationi-ui-concept .stationi-header-title { min-width: 0; }
+    #stationi-ui-concept .stationi-eyebrow {
+      margin: 0 0 3px;
+      color: var(--stationi-text-3);
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    #stationi-ui-concept .stationi-app-header h2,
+    #stationi-ui-concept .stationi-screen-title,
+    #stationi-ui-concept .stationi-section-title {
+      font-family: Sztos, Inter, Arial, sans-serif;
+      color: var(--stationi-text);
+      margin: 0;
+      font-weight: 600;
+      letter-spacing: -.02em;
+    }
+
+    #stationi-ui-concept .stationi-app-header h2 { font-size: 22px; }
+    #stationi-ui-concept .stationi-screen-title { font-size: 29px; line-height: 1.08; }
+    #stationi-ui-concept .stationi-section-title { font-size: 18px; }
+
+    #stationi-ui-concept .stationi-icon-button {
+      width: 44px;
+      height: 44px;
+      flex: 0 0 44px;
+      border: 0;
+      border-radius: 50%;
+      display: inline-grid;
+      place-items: center;
+      background: var(--stationi-surface);
+      color: var(--stationi-text);
+      box-shadow: 0 8px 24px rgba(12, 10, 18, .10);
+    }
+
+    #stationi-ui-concept[data-theme="dark"] .stationi-icon-button { box-shadow: none; }
+    #stationi-ui-concept .stationi-icon-button i { width: 21px; height: 21px; }
+
+    #stationi-ui-concept .stationi-primary,
+    #stationi-ui-concept .stationi-secondary,
+    #stationi-ui-concept .stationi-ghost {
+      min-height: 52px;
+      border-radius: 14px;
+      padding: 0 18px;
+      border: 0;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 9px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    #stationi-ui-concept .stationi-primary { background: var(--stationi-purple); color: #FFFFFF; }
+    #stationi-ui-concept .stationi-secondary { background: var(--stationi-surface-raised); color: var(--stationi-text); }
+    #stationi-ui-concept .stationi-ghost { min-height: 42px; background: transparent; color: var(--stationi-purple); }
+    #stationi-ui-concept .stationi-block { width: 100%; }
+
+    #stationi-ui-concept .stationi-card {
+      background: var(--stationi-surface);
+      border: 1px solid var(--stationi-border);
+      border-radius: 16px;
+      padding: 16px;
+    }
+
+    #stationi-ui-concept .stationi-card + .stationi-card { margin-top: 10px; }
+    #stationi-ui-concept .stationi-soft-card { background: var(--stationi-surface-raised); border-color: transparent; }
+
+    #stationi-ui-concept .stationi-row { display: flex; align-items: center; gap: 12px; }
+    #stationi-ui-concept .stationi-row-between { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    #stationi-ui-concept .stationi-stack { display: grid; gap: 12px; }
+    #stationi-ui-concept .stationi-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    #stationi-ui-concept .stationi-grow { min-width: 0; flex: 1; }
+
+    #stationi-ui-concept .stationi-body { margin: 0; color: var(--stationi-text-2); font-size: 14px; }
+    #stationi-ui-concept .stationi-small { margin: 0; color: var(--stationi-text-2); font-size: 12px; }
+    #stationi-ui-concept .stationi-caption { margin: 0; color: var(--stationi-text-3); font-size: 10px; letter-spacing: .04em; }
+    #stationi-ui-concept .stationi-value { font-family: Sztos, Inter, sans-serif; font-size: 25px; font-weight: 600; letter-spacing: -.02em; }
+    #stationi-ui-concept .stationi-purple-text { color: var(--stationi-purple); }
+    #stationi-ui-concept[data-theme="dark"] .stationi-purple-text { color: #B8A6E8; }
+    #stationi-ui-concept .stationi-green-text { color: var(--stationi-green); }
+    #stationi-ui-concept .stationi-red-text { color: var(--stationi-red); }
+
+    #stationi-ui-concept .stationi-divider { height: 1px; background: var(--stationi-border); margin: 14px 0; }
+    #stationi-ui-concept .stationi-chip-row { display: flex; gap: 7px; flex-wrap: wrap; }
+    #stationi-ui-concept .stationi-chip {
+      min-height: 34px;
+      padding: 0 12px;
+      border-radius: 999px;
+      border: 1px solid var(--stationi-border);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--stationi-surface);
+      color: var(--stationi-text-2);
+      font-size: 12px;
+      font-weight: 500;
+    }
+
+    #stationi-ui-concept .stationi-chip.selected { background: var(--stationi-purple-soft); color: var(--stationi-purple); border-color: transparent; }
+    #stationi-ui-concept[data-theme="dark"] .stationi-chip.selected { color: #D8CCF4; }
+    #stationi-ui-concept .stationi-chip i { width: 14px; height: 14px; }
+
+    #stationi-ui-concept .stationi-search {
+      min-height: 52px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 14px;
+      border-radius: 16px;
+      background: var(--stationi-surface);
+      color: var(--stationi-text-2);
+      border: 1px solid var(--stationi-border);
+      box-shadow: 0 10px 28px rgba(12, 10, 18, .10);
+    }
+
+    #stationi-ui-concept[data-theme="dark"] .stationi-search { box-shadow: none; }
+    #stationi-ui-concept .stationi-search input { min-width: 0; flex: 1; border: 0; outline: none; color: var(--stationi-text); background: transparent; }
+    #stationi-ui-concept .stationi-search input::placeholder { color: var(--stationi-text-2); opacity: 1; }
+
+    #stationi-ui-concept .stationi-nav {
+      position: absolute;
+      inset: auto 0 0;
+      height: 74px;
+      padding: 10px 12px 11px;
+      z-index: 25;
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 2px;
+      background: color-mix(in srgb, var(--stationi-surface) 94%, transparent);
+      border-top: 1px solid var(--stationi-border);
+      backdrop-filter: blur(18px);
+    }
+
+    #stationi-ui-concept .stationi-nav button {
+      position: relative;
+      border: 0;
+      background: transparent;
+      color: var(--stationi-text-3);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      font-size: 9px;
+      font-weight: 600;
+    }
+
+    #stationi-ui-concept .stationi-nav button.active { color: var(--stationi-purple); }
+    #stationi-ui-concept[data-theme="dark"] .stationi-nav button.active { color: #B8A6E8; }
+    #stationi-ui-concept .stationi-nav button i { width: 20px; height: 20px; }
+    #stationi-ui-concept .stationi-live-dot { position: absolute; top: 3px; right: 12px; width: 7px; height: 7px; border-radius: 50%; background: var(--stationi-green); box-shadow: 0 0 0 3px var(--stationi-surface); }
+
+    #stationi-ui-concept .stationi-map {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: var(--stationi-surface-raised);
+    }
+
+    #stationi-ui-concept .stationi-map-image {
+      position: absolute;
+      inset: -3%;
+      background-image: linear-gradient(color-mix(in srgb, var(--stationi-canvas) 12%, transparent), color-mix(in srgb, var(--stationi-canvas) 12%, transparent)), url("/stationi/algiers-map.jpg");
+      background-size: cover;
+      background-position: center;
+      filter: var(--stationi-map-filter);
+      opacity: .94;
+      transform: scale(1.03);
+    }
+
+    #stationi-ui-concept .stationi-map-attribution { position: absolute; left: 8px; bottom: 78px; color: #4C4752; font-size: 7px; line-height: 1; text-decoration: none; background: rgba(255,255,255,.82); padding: 3px 5px; border-radius: 4px; z-index: 3; }
+    #stationi-ui-concept[data-theme="dark"] .stationi-map-attribution { color: #C9C2D0; background: rgba(11,9,16,.76); }
+    #stationi-ui-concept .stationi-map-top { position: absolute; inset: 16px 16px auto; z-index: 8; display: grid; gap: 10px; }
+    #stationi-ui-concept .stationi-map-actions { display: flex; justify-content: flex-end; gap: 8px; }
+    #stationi-ui-concept .stationi-user-dot { position: absolute; left: 49%; top: 40%; width: 18px; height: 18px; z-index: 4; border-radius: 50%; background: #63D5E6; border: 4px solid #FFFFFF; box-shadow: 0 0 0 8px rgba(99,213,230,.18); }
+
+    #stationi-ui-concept .stationi-pin {
+      position: absolute;
+      z-index: 4;
+      transform: translate(-50%, -100%);
+      min-width: 58px;
+      height: 34px;
+      padding: 0 10px;
+      border: 0;
+      border-radius: 12px 12px 12px 2px;
+      background: var(--stationi-purple);
+      color: #FFFFFF;
+      box-shadow: 0 8px 24px rgba(52, 36, 80, .28);
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    #stationi-ui-concept .stationi-pin.selected { min-width: 74px; height: 42px; border-radius: 15px 15px 15px 3px; outline: 3px solid rgba(255,255,255,.78); }
+    #stationi-ui-concept .stationi-map-sheet {
+      position: absolute;
+      inset: auto 12px 10px;
+      z-index: 9;
+      border-radius: 24px;
+      background: var(--stationi-surface);
+      border: 1px solid var(--stationi-border);
+      box-shadow: 0 -12px 32px rgba(12, 10, 18, .14);
+      padding: 14px;
+    }
+
+    #stationi-ui-concept[data-theme="dark"] .stationi-map-sheet { box-shadow: 0 -16px 40px rgba(0,0,0,.38); }
+    #stationi-ui-concept .stationi-sheet-handle { width: 38px; height: 4px; border-radius: 999px; background: var(--stationi-border-strong); opacity: .5; margin: 0 auto 12px; }
+
+    #stationi-ui-concept .stationi-availability {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--stationi-green);
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    #stationi-ui-concept .stationi-availability::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; }
+    #stationi-ui-concept .stationi-parking-row { display: grid; grid-template-columns: 48px 1fr auto; gap: 12px; align-items: center; }
+    #stationi-ui-concept .stationi-place-icon { width: 48px; height: 48px; display: grid; place-items: center; border-radius: 14px; background: var(--stationi-purple-soft); color: var(--stationi-purple); }
+    #stationi-ui-concept[data-theme="dark"] .stationi-place-icon { color: #D8CCF4; }
+    #stationi-ui-concept .stationi-place-icon i { width: 22px; height: 22px; }
+    #stationi-ui-concept .stationi-price { text-align: right; font-family: Sztos, Inter, sans-serif; font-size: 17px; font-weight: 600; white-space: nowrap; }
+
+    #stationi-ui-concept .stationi-input {
+      min-height: 54px;
+      border: 1px solid var(--stationi-border-strong);
+      border-radius: 13px;
+      padding: 9px 13px;
+      background: var(--stationi-surface);
+      display: grid;
+      align-content: center;
+      gap: 2px;
+    }
+
+    #stationi-ui-concept .stationi-input label { font-size: 10px; color: var(--stationi-text-3); }
+    #stationi-ui-concept .stationi-input strong { font-size: 14px; }
+    #stationi-ui-concept .stationi-toggle { width: 42px; height: 24px; border-radius: 999px; background: var(--stationi-border-strong); padding: 3px; flex: 0 0 auto; }
+    #stationi-ui-concept .stationi-toggle.on { background: var(--stationi-purple); }
+    #stationi-ui-concept .stationi-toggle::after { content: ""; display: block; width: 18px; height: 18px; border-radius: 50%; background: #FFFFFF; transform: translateX(0); }
+    #stationi-ui-concept .stationi-toggle.on::after { transform: translateX(18px); }
+
+    #stationi-ui-concept .stationi-hero-gradient {
+      background: radial-gradient(circle at 74% 20%, rgba(168,139,234,.62), transparent 30%), radial-gradient(circle at 24% 78%, rgba(99,213,230,.20), transparent 28%), linear-gradient(145deg, #0D0A17 0%, #261749 54%, #735EA9 122%);
+      color: #FFFFFF;
+    }
+
+    #stationi-ui-concept .stationi-brand-lockup { display: flex; align-items: center; gap: 11px; }
+    #stationi-ui-concept .stationi-brand-word { font-family: Sztos, Inter, sans-serif; font-size: 20px; font-weight: 600; letter-spacing: .015em; }
+    #stationi-ui-concept .stationi-mark { display: block; flex: 0 0 auto; }
+    #stationi-ui-concept .stationi-mark-main { fill: var(--stationi-mark-main); }
+    #stationi-ui-concept .stationi-mark-accent { fill: var(--stationi-purple); }
+    #stationi-ui-concept .on-gradient .stationi-mark-main { fill: #FFFFFF; }
+    #stationi-ui-concept .stationi-mark.on-gradient .stationi-mark-main { fill: #FFFFFF; }
+
+    #stationi-ui-concept .stationi-feature-list { display: grid; gap: 11px; }
+    #stationi-ui-concept .stationi-feature { display: flex; gap: 11px; align-items: flex-start; }
+    #stationi-ui-concept .stationi-feature-icon { width: 34px; height: 34px; flex: 0 0 34px; border-radius: 11px; display: grid; place-items: center; background: rgba(255,255,255,.12); color: #FFFFFF; }
+    #stationi-ui-concept .stationi-feature-icon i { width: 18px; height: 18px; }
+
+    #stationi-ui-concept .stationi-otp { display: grid; grid-template-columns: repeat(4, 1fr); gap: 9px; }
+    #stationi-ui-concept .stationi-otp span { height: 54px; border-radius: 13px; display: grid; place-items: center; background: var(--stationi-surface); border: 1px solid var(--stationi-border-strong); font-size: 22px; font-weight: 600; }
+
+    #stationi-ui-concept .stationi-permission-icon { width: 46px; height: 46px; border-radius: 14px; display: grid; place-items: center; background: var(--stationi-purple-soft); color: var(--stationi-purple); }
+    #stationi-ui-concept[data-theme="dark"] .stationi-permission-icon { color: #D8CCF4; }
+
+    #stationi-ui-concept .stationi-range { height: 6px; border-radius: 999px; background: var(--stationi-border); position: relative; margin: 15px 3px; }
+    #stationi-ui-concept .stationi-range::before { content: ""; position: absolute; left: 0; top: 0; width: 64%; height: 100%; border-radius: inherit; background: var(--stationi-purple); }
+    #stationi-ui-concept .stationi-range::after { content: ""; position: absolute; left: 61%; top: 50%; width: 20px; height: 20px; border-radius: 50%; background: var(--stationi-purple); border: 4px solid var(--stationi-surface); transform: translateY(-50%); box-shadow: 0 2px 8px rgba(0,0,0,.18); }
+
+    #stationi-ui-concept .stationi-detail-hero { height: 214px; position: relative; overflow: hidden; background: linear-gradient(135deg, #16111F, #38245F); }
+    #stationi-ui-concept .stationi-detail-hero::before { content: ""; position: absolute; width: 250px; height: 250px; right: -60px; top: -80px; border-radius: 50%; background: radial-gradient(circle, rgba(168,139,234,.75), rgba(115,94,169,.10) 64%, transparent 65%); }
+    #stationi-ui-concept .stationi-detail-lines { position: absolute; inset: 0; background: repeating-linear-gradient(115deg, transparent 0 44px, rgba(255,255,255,.05) 45px 46px); }
+    #stationi-ui-concept .stationi-detail-badge { position: absolute; left: 20px; bottom: 18px; min-height: 34px; padding: 0 12px; display: inline-flex; align-items: center; gap: 7px; color: #FFFFFF; background: rgba(0,0,0,.42); border: 1px solid rgba(255,255,255,.18); border-radius: 999px; font-size: 12px; }
+
+    #stationi-ui-concept .stationi-bay-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+    #stationi-ui-concept .stationi-bay { height: 62px; border-radius: 10px; display: grid; place-items: center; background: var(--stationi-green-soft); color: var(--stationi-green); border: 1px solid color-mix(in srgb, var(--stationi-green) 24%, transparent); font-size: 11px; font-weight: 700; }
+    #stationi-ui-concept .stationi-bay.busy { background: var(--stationi-surface-raised); color: var(--stationi-text-3); border-color: var(--stationi-border); }
+    #stationi-ui-concept .stationi-bay.selected { background: var(--stationi-purple); color: #FFFFFF; border-color: transparent; }
+
+    #stationi-ui-concept .stationi-time-card { text-align: center; padding: 18px; }
+    #stationi-ui-concept .stationi-time { font-family: Sztos, Inter, sans-serif; font-size: 38px; font-weight: 600; letter-spacing: -.03em; }
+    #stationi-ui-concept .stationi-stepper { display: grid; grid-template-columns: 44px 1fr 44px; align-items: center; gap: 8px; }
+    #stationi-ui-concept .stationi-stepper button { width: 44px; height: 44px; border: 0; border-radius: 13px; background: var(--stationi-surface-raised); color: var(--stationi-text); font-size: 22px; }
+
+    #stationi-ui-concept .stationi-vehicle { position: relative; overflow: hidden; }
+    #stationi-ui-concept .stationi-vehicle.selected { border-color: var(--stationi-purple); box-shadow: inset 0 0 0 1px var(--stationi-purple); }
+    #stationi-ui-concept .stationi-vehicle-shape { width: 64px; height: 33px; border-radius: 21px 28px 12px 12px; background: linear-gradient(145deg, #B7A6E5, #735EA9); position: relative; }
+    #stationi-ui-concept .stationi-vehicle-shape::before, #stationi-ui-concept .stationi-vehicle-shape::after { content: ""; position: absolute; width: 12px; height: 12px; bottom: -5px; border-radius: 50%; background: #17141C; border: 3px solid #6F6877; }
+    #stationi-ui-concept .stationi-vehicle-shape::before { left: 9px; }
+    #stationi-ui-concept .stationi-vehicle-shape::after { right: 9px; }
+    #stationi-ui-concept .stationi-check { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; background: var(--stationi-purple); color: #FFFFFF; }
+
+    #stationi-ui-concept .stationi-payment-logo { width: 42px; height: 30px; display: grid; place-items: center; border-radius: 8px; background: var(--stationi-surface-raised); color: var(--stationi-purple); font-size: 11px; font-weight: 800; }
+    #stationi-ui-concept .stationi-total { padding: 15px 0 2px; display: flex; justify-content: space-between; align-items: flex-end; border-top: 1px solid var(--stationi-border); }
+
+    #stationi-ui-concept .stationi-success-orb { width: 84px; height: 84px; margin: 8px auto 18px; border-radius: 50%; display: grid; place-items: center; background: var(--stationi-purple-soft); color: var(--stationi-purple); box-shadow: 0 0 0 12px color-mix(in srgb, var(--stationi-purple-soft) 46%, transparent); }
+    #stationi-ui-concept .stationi-success-orb i { width: 36px; height: 36px; }
+    #stationi-ui-concept .stationi-qr { width: 148px; height: 148px; margin: 0 auto; padding: 10px; border-radius: 16px; background: #FFFFFF; display: grid; grid-template-columns: repeat(9, 1fr); gap: 2px; box-shadow: 0 10px 30px rgba(12,10,18,.12); }
+    #stationi-ui-concept .stationi-qr span { background: #0B0910; border-radius: 1px; }
+    #stationi-ui-concept .stationi-qr span.off { background: transparent; }
+
+    #stationi-ui-concept .stationi-route-line { position: absolute; inset: 155px 80px 220px 75px; z-index: 3; }
+    #stationi-ui-concept .stationi-route-line svg { width: 100%; height: 100%; overflow: visible; }
+    #stationi-ui-concept .stationi-route-line path.route-under { fill: none; stroke: rgba(255,255,255,.88); stroke-width: 10; stroke-linecap: round; stroke-linejoin: round; }
+    #stationi-ui-concept .stationi-route-line path.route-over { fill: none; stroke: var(--stationi-purple); stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+
+    #stationi-ui-concept .stationi-nav-banner { position: absolute; inset: 15px 14px auto; z-index: 10; padding: 14px; border-radius: 18px; background: var(--stationi-surface); border: 1px solid var(--stationi-border); box-shadow: var(--stationi-shadow); }
+    #stationi-ui-concept .stationi-direction-icon { width: 50px; height: 50px; border-radius: 15px; display: grid; place-items: center; background: var(--stationi-purple); color: #FFFFFF; }
+    #stationi-ui-concept .stationi-direction-icon i { width: 27px; height: 27px; }
+
+    #stationi-ui-concept .stationi-timer-wrap { position: relative; width: 250px; height: 250px; margin: 8px auto 18px; display: grid; place-items: center; }
+    #stationi-ui-concept .stationi-timer-wrap svg { position: absolute; inset: 0; transform: rotate(-90deg); }
+    #stationi-ui-concept .stationi-timer-content { text-align: center; position: relative; z-index: 1; }
+    #stationi-ui-concept .stationi-timer-number { font-family: Sztos, Inter, sans-serif; font-size: 38px; font-weight: 600; letter-spacing: -.03em; }
+
+    #stationi-ui-concept .stationi-stars { display: flex; justify-content: center; gap: 9px; margin: 18px 0; }
+    #stationi-ui-concept .stationi-stars button { width: 44px; height: 44px; border: 0; background: transparent; color: var(--stationi-purple); }
+    #stationi-ui-concept .stationi-stars i { width: 31px; height: 31px; fill: currentColor; }
+
+    #stationi-ui-concept .stationi-notice { display: flex; gap: 12px; padding: 13px; border-radius: 14px; background: var(--stationi-purple-soft); color: var(--stationi-text); }
+    #stationi-ui-concept .stationi-notice i { color: var(--stationi-purple); flex: 0 0 auto; }
+    #stationi-ui-concept[data-theme="dark"] .stationi-notice i { color: #D8CCF4; }
+
+    #stationi-ui-concept .stationi-avatar { width: 52px; height: 52px; border-radius: 18px; display: grid; place-items: center; background: linear-gradient(145deg, #A88BEA, #5C478E); color: #FFFFFF; font-family: Sztos, Inter, sans-serif; font-size: 19px; font-weight: 600; }
+    #stationi-ui-concept .stationi-wallet { background: linear-gradient(145deg, #191222, #3A285D 58%, #735EA9 140%); color: #FFFFFF; border: 0; }
+    #stationi-ui-concept .stationi-wallet .stationi-small { color: rgba(255,255,255,.72); }
+
+    #stationi-ui-concept .stationi-menu-row { min-height: 50px; display: grid; grid-template-columns: 34px 1fr auto; gap: 10px; align-items: center; border-bottom: 1px solid var(--stationi-border); }
+    #stationi-ui-concept .stationi-menu-row:last-child { border-bottom: 0; }
+    #stationi-ui-concept .stationi-menu-icon { width: 32px; height: 32px; border-radius: 10px; display: grid; place-items: center; background: var(--stationi-surface-raised); color: var(--stationi-purple); }
+    #stationi-ui-concept[data-theme="dark"] .stationi-menu-icon { color: #D8CCF4; }
+    #stationi-ui-concept .stationi-menu-icon i { width: 17px; height: 17px; }
+
+    #stationi-ui-concept .stationi-segmented { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; padding: 4px; gap: 3px; border-radius: 12px; background: var(--stationi-surface-raised); }
+    #stationi-ui-concept .stationi-segmented button { height: 34px; border: 0; border-radius: 9px; background: transparent; color: var(--stationi-text-2); font-size: 11px; font-weight: 600; }
+    #stationi-ui-concept .stationi-segmented button.active { background: var(--stationi-surface); color: var(--stationi-purple); box-shadow: 0 3px 10px rgba(12,10,18,.08); }
+
+    @media (max-width: 440px) {
+      #stationi-ui-concept .stationi-screen-grid { grid-template-columns: minmax(0, 1fr); }
+      #stationi-ui-concept .stationi-phone { border-radius: 30px; }
+      #stationi-ui-concept .stationi-gallery-tools { align-items: flex-start; }
+    }
+
+    #stationi-ui-concept {
+      --foreground: #FAF9FC;
+      --muted-foreground: #A9A2B3;
+      box-sizing: border-box;
+      width: 100%;
+      min-height: 100dvh;
+      padding: 20px 20px 34px;
+      background:
+        radial-gradient(circle at 18% 10%, rgba(115,94,169,.24), transparent 30%),
+        radial-gradient(circle at 82% 88%, rgba(115,94,169,.15), transparent 34%),
+        #08080A;
+    }
+
+    #stationi-ui-concept .stationi-gallery-tools {
+      position: sticky;
+      top: 12px;
+      z-index: 100;
+      width: min(780px, 100%);
+      margin: 0 auto 18px;
+      padding: 10px 12px;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 18px;
+      background: rgba(14,12,19,.88);
+      box-shadow: 0 20px 60px rgba(0,0,0,.32);
+      backdrop-filter: blur(18px);
+    }
+
+    #stationi-ui-concept .stationi-gallery-heading {
+      min-width: 170px;
+      color: #FAF9FC;
+      font: 600 13px/1.2 Inter, Arial, sans-serif;
+      letter-spacing: .08em;
+    }
+
+    #stationi-ui-concept .stationi-gallery-heading small {
+      display: block;
+      margin-top: 3px;
+      color: #91899C;
+      font-size: 10px;
+      font-weight: 500;
+      letter-spacing: .05em;
+    }
+
+    #stationi-ui-concept .prototype-controls,
+    #stationi-ui-concept .stationi-mode-controls {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+    }
+
+    #stationi-ui-concept .prototype-control,
+    #stationi-ui-concept .btn {
+      min-height: 36px;
+      border: 1px solid rgba(255,255,255,.13);
+      border-radius: 11px;
+      color: #D8D2E0;
+      background: #1A1620;
+      cursor: pointer;
+      transition: border-color .18s ease, background .18s ease, transform .18s ease;
+    }
+
+    #stationi-ui-concept .prototype-control:hover,
+    #stationi-ui-concept .btn:hover { border-color: rgba(184,166,232,.65); }
+    #stationi-ui-concept .prototype-control:active,
+    #stationi-ui-concept .btn:active { transform: translateY(1px); }
+    #stationi-ui-concept .prototype-control:disabled { opacity: .38; cursor: default; transform: none; }
+    #stationi-ui-concept .prototype-step { width: 36px; padding: 0; font-size: 19px; }
+    #stationi-ui-concept .prototype-picker { width: min(250px, 30vw); padding: 0 32px 0 11px; }
+    #stationi-ui-concept .btn { padding: 0 12px; font-size: 11px; }
+    #stationi-ui-concept .btn-primary { border-color: #735EA9; color: #FFF; background: #735EA9; }
+
+    #stationi-ui-concept .stationi-screen-grid {
+      display: block;
+      width: min(430px, 100%);
+      margin: 0 auto;
+    }
+
+    #stationi-ui-concept .stationi-frame { width: 100%; }
+    #stationi-ui-concept .stationi-frame-label { color: #FAF9FC; }
+    #stationi-ui-concept .stationi-frame-label span { color: #91899C; }
+    #stationi-ui-concept .stationi-phone {
+      margin: 0 auto;
+      box-shadow: 0 42px 100px rgba(0,0,0,.48), 0 0 0 1px rgba(255,255,255,.05);
+    }
+
+    #stationi-ui-concept .stationi-phone button,
+    #stationi-ui-concept .stationi-phone .stationi-card,
+    #stationi-ui-concept .stationi-phone .stationi-parking-row,
+    #stationi-ui-concept .stationi-phone .stationi-menu-row,
+    #stationi-ui-concept .stationi-phone .stationi-bay,
+    #stationi-ui-concept .stationi-phone .stationi-chip { cursor: pointer; }
+
+    #stationi-ui-concept .prototype-toast {
+      position: fixed;
+      left: 50%;
+      bottom: 24px;
+      z-index: 200;
+      max-width: min(360px, calc(100vw - 32px));
+      padding: 11px 16px;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 999px;
+      color: #FFF;
+      background: rgba(25,21,31,.94);
+      box-shadow: 0 16px 50px rgba(0,0,0,.35);
+      font: 500 13px/1.3 Inter, Arial, sans-serif;
+      text-align: center;
+      opacity: 0;
+      pointer-events: none;
+      transform: translate(-50%, 12px);
+      transition: opacity .18s ease, transform .18s ease;
+    }
+
+    #stationi-ui-concept .prototype-toast.show { opacity: 1; transform: translate(-50%, 0); }
+    #stationi-ui-concept .stationi-stars button.selected { color: var(--stationi-purple); }
+    #stationi-ui-concept .stationi-stars button.selected svg { fill: currentColor; }
+
+    @media (max-width: 720px) {
+      #stationi-ui-concept { padding: 8px 6px 24px; }
+      #stationi-ui-concept .stationi-gallery-tools { position: relative; top: 0; border-radius: 14px; }
+      #stationi-ui-concept .stationi-gallery-heading { display: none; }
+      #stationi-ui-concept .prototype-controls { flex: 0 0 auto; width: 100%; max-width: 100%; min-width: 0; }
+      #stationi-ui-concept .prototype-picker { flex: 1; width: auto; min-width: 0; }
+      #stationi-ui-concept .stationi-mode-controls { flex: 0 0 auto; width: 100%; max-width: 100%; }
+      #stationi-ui-concept .stationi-mode-controls .btn { flex: 1; }
+    }
+  </style>
+
+  <svg width="0" height="0" aria-hidden="true" style="position:absolute;overflow:hidden">
+    <defs>
+      <symbol id="stationi-main-ui" viewBox="563 0 537 723">
+        <path d="M1045.66,262.55l-167.27-117.09c-25.51-17.88-60.69-11.67-78.56,13.84l-54.35,77.65c-17.85,25.51-11.67,60.69,13.88,78.56l162.53,113.77c53.57,37.5,64.74,112.23,24.53,163.79-36.49,46.78-73.77,93.28-95.71,120.5-10.09,12.51-29.15,12.51-39.24,0-19.2-23.81-50.12-62.36-81.98-102.95-2.08-2.65,1.22-6.14,3.98-4.21h0c25.51,17.85,60.69,11.63,78.56-13.88l46.69-66.69c17.85-25.54,11.64-60.71-13.87-78.56l-264.18-184.94-1.73-1.22c-9.65-7.15-15.9-18.63-15.9-31.56,0,0,0-.01,0-.02,0-1.28,.14-2.55,.37-3.81,.59-3.16,1.23-6.31,1.93-9.44,11.45-51.2,38.17-98.29,78.69-138.82C695.69,25.83,763.38,0,831.08,0s135.42,25.83,187.06,77.47c43.73,43.73,71.38,95.1,81.12,151.03,5.25,30.13-28.54,51.58-53.6,34.05Z"/>
+      </symbol>
+      <symbol id="stationi-accents-ui" viewBox="563 0 537 723">
+        <path fill-rule="evenodd" d="M944.22,239.22c-28.15,31.69-51.89,66.37-71.22,104.05-2.76,1.19-4.97,2.14-7.73,3.33-11.33-3.29-22.66-6.52-34.01-9.71-12.11-3.4-19.27-15.97-15.8-28.06,.02-.08,.04-.15,.07-.23,5.3-15.94,11.78-31.27,19.44-45.94,.08-.15,.16-.3,.25-.44,14.15-22.92,31.51-42.99,52.13-60.26,5.88-5.09,12.3-9.17,19.27-12.25,2.29-1.01,4.98-.29,6.49,1.71,10.42,13.76,20.86,27.46,31.34,41.1,1.54,2,1.45,4.81-.23,6.7Z"/>
+        <path fill-rule="evenodd" d="M1079.42,320.99c10.99,4.36,17.08,16.2,14.15,27.66-10.55,41.21-29.93,83.54-58.7,126.07l-.08,.11c-4.29,6.33-13.34,7.06-18.58,1.49-9.33-9.89-18.62-19.79-27.86-29.71-8.3-8.91-8.48-22.68-.41-31.79,10.56-11.93,20.29-24.5,29.2-37.7,11.19-16.67,21.56-33.85,31.1-51.53,4.29-7.94,13.82-11.46,22.21-8.15,2.99,1.18,5.98,2.36,8.97,3.55Z"/>
+        <path fill-rule="evenodd" d="M784.09,421.34c-6.72,33.76-21.24,63.84-43.54,90.26-12.58,15.35-27.37,28.07-44.39,38.21l-.04,.02c-2.34,1.07-5.12,.39-6.69-1.65-4.78-6.19-9.53-12.4-14.25-18.62-9.99-13.18-9.88-31.44,.31-44.47,6.78-8.66,13.27-17.56,19.46-26.69,8.29-12.28,16.24-24.76,23.85-37.43,6.9-11.49,20.62-16.96,33.53-13.34,9.27,2.6,18.53,5.27,27.77,8.01,2.48,.74,4.12,3.08,3.99,5.66v.05Z"/>
+      </symbol>
+    </defs>
+  </svg>
+
+  <div class="stationi-gallery-tools">
+    <div class="stationi-gallery-heading"><i data-lucide="smartphone" aria-hidden="true"></i><span>STATIONI PROTOTYPE<small>24 ÉCRANS · ALGER</small></span></div>
+    <div class="prototype-controls" aria-label="Navigation du prototype">
+      <button type="button" class="prototype-control prototype-step" data-prototype-prev aria-label="Écran précédent">‹</button>
+      <select class="prototype-control prototype-picker" data-prototype-picker aria-label="Choisir un écran"></select>
+      <button type="button" class="prototype-control prototype-step" data-prototype-next aria-label="Écran suivant">›</button>
+    </div>
+    <div class="stationi-mode-controls" aria-label="Choisir le thème">
+      <button type="button" class="btn btn-primary" data-stationi-theme="light" aria-pressed="true">Clair</button>
+      <button type="button" class="btn" data-stationi-theme="dark" aria-pressed="false">Sombre</button>
+    </div>
+  </div>
+  <div class="stationi-screen-grid" aria-live="polite"></div>
+  <div class="prototype-toast" role="status" aria-live="polite"></div>
+
+  <script>
+    (() => {
+      const root = document.getElementById("stationi-ui-concept");
+      const grid = root.querySelector(".stationi-screen-grid");
+
+      const icon = (name) => `<i data-lucide="${name}" aria-hidden="true"></i>`;
+      const mark = (width = 28, className = "") => `<svg class="stationi-mark ${className}" width="${width}" height="${Math.round(width * 1.346)}" viewBox="563 0 537 723" aria-hidden="true"><path class="stationi-mark-main" d="M1045.66,262.55l-167.27-117.09c-25.51-17.88-60.69-11.67-78.56,13.84l-54.35,77.65c-17.85,25.51-11.67,60.69,13.88,78.56l162.53,113.77c53.57,37.5,64.74,112.23,24.53,163.79-36.49,46.78-73.77,93.28-95.71,120.5-10.09,12.51-29.15,12.51-39.24,0-19.2-23.81-50.12-62.36-81.98-102.95-2.08-2.65,1.22-6.14,3.98-4.21h0c25.51,17.85,60.69,11.63,78.56-13.88l46.69-66.69c17.85-25.54,11.64-60.71-13.87-78.56l-264.18-184.94-1.73-1.22c-9.65-7.15-15.9-18.63-15.9-31.56,0,0,0-.01,0-.02,0-1.28,.14-2.55,.37-3.81,.59-3.16,1.23-6.31,1.93-9.44,11.45-51.2,38.17-98.29,78.69-138.82C695.69,25.83,763.38,0,831.08,0s135.42,25.83,187.06,77.47c43.73,43.73,71.38,95.1,81.12,151.03,5.25,30.13-28.54,51.58-53.6,34.05Z"/><path class="stationi-mark-accent" fill-rule="evenodd" d="M944.22,239.22c-28.15,31.69-51.89,66.37-71.22,104.05-2.76,1.19-4.97,2.14-7.73,3.33-11.33-3.29-22.66-6.52-34.01-9.71-12.11-3.4-19.27-15.97-15.8-28.06,.02-.08,.04-.15,.07-.23,5.3-15.94,11.78-31.27,19.44-45.94,.08-.15,.16-.3,.25-.44,14.15-22.92,31.51-42.99,52.13-60.26,5.88-5.09,12.3-9.17,19.27-12.25,2.29-1.01,4.98-.29,6.49,1.71,10.42,13.76,20.86,27.46,31.34,41.1,1.54,2,1.45,4.81-.23,6.7Z"/><path class="stationi-mark-accent" fill-rule="evenodd" d="M1079.42,320.99c10.99,4.36,17.08,16.2,14.15,27.66-10.55,41.21-29.93,83.54-58.7,126.07l-.08,.11c-4.29,6.33-13.34,7.06-18.58,1.49-9.33-9.89-18.62-19.79-27.86-29.71-8.3-8.91-8.48-22.68-.41-31.79,10.56-11.93,20.29-24.5,29.2-37.7,11.19-16.67,21.56-33.85,31.1-51.53,4.29-7.94,13.82-11.46,22.21-8.15,2.99,1.18,5.98,2.36,8.97,3.55Z"/><path class="stationi-mark-accent" fill-rule="evenodd" d="M784.09,421.34c-6.72,33.76-21.24,63.84-43.54,90.26-12.58,15.35-27.37,28.07-44.39,38.21l-.04,.02c-2.34,1.07-5.12,.39-6.69-1.65-4.78-6.19-9.53-12.4-14.25-18.62-9.99-13.18-9.88-31.44,.31-44.47,6.78-8.66,13.27-17.56,19.46-26.69,8.29-12.28,16.24-24.76,23.85-37.43,6.9-11.49,20.62-16.96,33.53-13.34,9.27,2.6,18.53,5.27,27.77,8.01,2.48,.74,4.12,3.08,3.99,5.66v.05Z"/></svg>`;
+      const lockup = (onGradient = false) => `<div class="stationi-brand-lockup ${onGradient ? "on-gradient" : ""}">${mark(27)}<span class="stationi-brand-word">STATIONI</span></div>`;
+      const status = () => `<div class="stationi-status"><span>9:41</span><span class="stationi-status-icons">${icon("signal")}${icon("wifi")}${icon("battery-full")}</span></div>`;
+      const header = (title, eyebrow = "", action = "bell", back = false) => `<header class="stationi-app-header"><button class="stationi-icon-button" type="button" aria-label="${back ? "Retour" : "Menu"}">${icon(back ? "chevron-left" : "menu")}</button><div class="stationi-header-title stationi-grow">${eyebrow ? `<p class="stationi-eyebrow">${eyebrow}</p>` : ""}<h2>${title}</h2></div>${action ? `<button class="stationi-icon-button" type="button" aria-label="Action">${icon(action)}</button>` : `<span style="width:44px"></span>`}</header>`;
+      const nav = (active = "map", live = false) => {
+        const items = [["map","map","Carte"],["heart","heart","Favoris"],["timer","circle-parking","Session"],["activity","receipt-text","Activité"],["profile","user-round","Profil"]];
+        return `<nav class="stationi-nav" aria-label="Navigation principale">${items.map(([id, ico, label]) => `<button type="button" class="${active === id ? "active" : ""}" aria-label="${label}">${icon(ico)}<span>${label}</span>${live && id === "timer" ? `<span class="stationi-live-dot"></span>` : ""}</button>`).join("")}</nav>`;
+      };
+      const parkingRow = (name, meta, price, iconName = "square-parking", statusText = "Disponible") => `<div class="stationi-parking-row"><div class="stationi-place-icon">${icon(iconName)}</div><div class="stationi-grow"><strong>${name}</strong><p class="stationi-small">${meta}</p><span class="stationi-availability">${statusText}</span></div><div class="stationi-price">${price}</div></div>`;
+      const mapBase = (sheet, options = {}) => `<div class="stationi-map"><div class="stationi-map-image"></div><a class="stationi-map-attribution" href="https://www.openstreetmap.org/copyright" target="_blank" rel="noreferrer">© OpenStreetMap</a><div class="stationi-user-dot"></div><button class="stationi-pin" style="left:25%;top:34%">80 DA</button><button class="stationi-pin selected" style="left:63%;top:42%">120 DA/h</button><button class="stationi-pin" style="left:75%;top:25%">100 DA</button><button class="stationi-pin" style="left:42%;top:61%">90 DA</button>${options.route ? `<div class="stationi-route-line"><svg viewBox="0 0 220 330" aria-hidden="true"><path class="route-under" d="M24 306C53 261 31 224 74 191S99 128 139 98s28-52 58-79"></path><path class="route-over" d="M24 306C53 261 31 224 74 191S99 128 139 98s28-52 58-79"></path></svg></div>` : ""}${sheet || ""}</div>`;
+      const menuRow = (ico, title, meta = "", trailing = "chevron-right") => `<div class="stationi-menu-row"><span class="stationi-menu-icon">${icon(ico)}</span><span><strong>${title}</strong>${meta ? `<span class="stationi-small" style="display:block">${meta}</span>` : ""}</span>${trailing === "toggle" ? `<span class="stationi-toggle on"></span>` : icon(trailing)}</div>`;
+      const qr = () => { const off = new Set([2,5,7,9,10,14,15,18,21,22,24,26,29,31,34,35,37,41,43,45,46,50,53,55,56,58,62,65,67,68,70,72,73,77]); return `<div class="stationi-qr" aria-label="QR d’accès décoratif">${Array.from({length:81}, (_, i) => `<span class="${off.has(i) ? "off" : ""}"></span>`).join("")}</div>`; };
+
+      const screens = [
+        {
+          slug: "01-welcome",
+          title: "Bienvenue",
+          noNav: true,
+          body: () => `<main class="stationi-main stationi-hero-gradient"><div class="stationi-scroll" style="padding:38px 28px 30px;display:flex;flex-direction:column">${lockup(true)}<div style="margin:auto 0 26px">${mark(92, "on-gradient")}<p class="stationi-eyebrow" style="color:#CFC4E6;margin-top:28px">STATIONNEMENT INTELLIGENT À ALGER</p><h1 class="stationi-screen-title" style="color:#fff;font-size:39px;max-width:300px">Votre place,<br>sans tourner en rond.</h1><p style="color:rgba(255,255,255,.76);font-size:15px;max-width:310px">Trouvez, réservez et payez votre stationnement en temps réel.</p></div><div class="stationi-feature-list" style="margin-bottom:22px"><div class="stationi-feature"><span class="stationi-feature-icon">${icon("map-pin")}</span><span><strong>Disponibilité en direct</strong><small style="display:block;color:rgba(255,255,255,.66)">Autour de votre destination</small></span></div><div class="stationi-feature"><span class="stationi-feature-icon">${icon("scan-line")}</span><span><strong>Accès par plaque</strong><small style="display:block;color:rgba(255,255,255,.66)">Entrez sans ticket</small></span></div></div><button class="stationi-primary stationi-block" type="button">Commencer ${icon("arrow-right")}</button><button class="stationi-ghost stationi-block" style="color:#fff" type="button">J’ai déjà un compte</button></div></main>`
+        },
+        {
+          slug: "02-sign-in",
+          title: "Connexion + OTP",
+          noNav: true,
+          body: () => `<main class="stationi-main"><div class="stationi-scroll" style="padding-top:24px">${lockup()}<div style="margin-top:66px"><p class="stationi-eyebrow">BIENVENUE</p><h1 class="stationi-screen-title">Votre numéro<br>de téléphone</h1><p class="stationi-body" style="margin-top:10px">Nous vous enverrons un code sécurisé par SMS.</p></div><div class="stationi-input" style="margin-top:28px"><label>Numéro mobile</label><strong>🇩🇿 +213&nbsp;&nbsp; 5 50 24 18 42</strong></div><button class="stationi-primary stationi-block" style="margin-top:14px" type="button">Recevoir le code</button><div class="stationi-divider"></div><p class="stationi-eyebrow">CODE DE VÉRIFICATION</p><div class="stationi-otp"><span>2</span><span>4</span><span>0</span><span>8</span></div><p class="stationi-small" style="text-align:center;margin-top:12px">Code envoyé au +213 •• •• •• 42</p><button class="stationi-ghost stationi-block" type="button">Renvoyer dans 00:28</button><p class="stationi-caption" style="text-align:center;margin-top:28px">En continuant, vous acceptez les conditions d’utilisation.</p></div></main>`
+        },
+        {
+          slug: "03-permissions",
+          title: "Autorisations",
+          noNav: true,
+          body: () => `<main class="stationi-main"><div class="stationi-scroll">${header("Préparons votre trajet", "3 ÉTAPES", "x", true)}<p class="stationi-body">Activez ces options pour profiter du stationnement automatique.</p><div class="stationi-stack" style="margin-top:22px"><div class="stationi-card"><div class="stationi-row"><span class="stationi-permission-icon">${icon("locate-fixed")}</span><div class="stationi-grow"><strong>Localisation précise</strong><p class="stationi-small">Trouvez les places proches et votre véhicule.</p></div><span class="stationi-check">${icon("check")}</span></div></div><div class="stationi-card"><div class="stationi-row"><span class="stationi-permission-icon">${icon("bell-ring")}</span><div class="stationi-grow"><strong>Alertes de fin</strong><p class="stationi-small">Recevez un rappel 15 minutes avant l’échéance.</p></div><span class="stationi-toggle on"></span></div></div><div class="stationi-card"><div class="stationi-row"><span class="stationi-permission-icon">${icon("scan-line")}</span><div class="stationi-grow"><strong>Lecture de plaque</strong><p class="stationi-small">Accès automatique aux parkings compatibles.</p></div><span class="stationi-toggle on"></span></div></div></div><div class="stationi-notice" style="margin-top:18px">${icon("shield-check")}<span><strong>Vos données restent privées.</strong><span class="stationi-small" style="display:block">Vous pouvez modifier ces choix à tout moment.</span></span></div><button class="stationi-primary stationi-block" style="margin-top:28px" type="button">Continuer</button><button class="stationi-ghost stationi-block" type="button">Configurer plus tard</button></div></main>`
+        },
+        {
+          slug: "04-home-map",
+          title: "Carte d’accueil",
+          body: () => `<main class="stationi-main">${mapBase(`<div class="stationi-map-top"><div class="stationi-search">${icon("search")}<input aria-label="Destination" placeholder="Où allez-vous ?"><button class="stationi-icon-button" type="button" aria-label="Filtres" style="width:36px;height:36px;flex-basis:36px;box-shadow:none">${icon("sliders-horizontal")}</button></div><div class="stationi-map-actions"><button class="stationi-icon-button" type="button" aria-label="Recentrer">${icon("locate-fixed")}</button><button class="stationi-icon-button" type="button" aria-label="Afficher la liste">${icon("list")}</button></div></div><div class="stationi-map-sheet"><div class="stationi-sheet-handle"></div><div class="stationi-row-between"><div><p class="stationi-eyebrow">AUTOUR DE VOUS</p><strong>34 places libres</strong></div><span class="stationi-chip selected">À moins de 10 min</span></div><div class="stationi-divider"></div>${parkingRow("Parking Grande Poste", "4 min · Alger Centre", "120 DA/h")}</div>`)}</main>${nav("map")}`
+        },
+        {
+          slug: "05-search",
+          title: "Recherche",
+          body: () => `<main class="stationi-main"><div class="stationi-scroll">${header("Rechercher", "DESTINATION", "x", true)}<div class="stationi-search">${icon("search")}<input value="Alger Centre" aria-label="Recherche"><button class="stationi-icon-button" type="button" aria-label="Effacer" style="width:34px;height:34px;flex-basis:34px;box-shadow:none">${icon("x")}</button></div><p class="stationi-eyebrow" style="margin-top:22px">RÉSULTATS</p><div class="stationi-card">${parkingRow("Parking Grande Poste", "4 min · 34 libres", "120 DA/h")}<div class="stationi-divider"></div>${parkingRow("Didouche Mourad", "7 min · 18 libres", "100 DA/h")}<div class="stationi-divider"></div>${parkingRow("Port d’Alger", "9 min · 52 libres", "90 DA/h")}</div><p class="stationi-eyebrow" style="margin-top:22px">RECHERCHES RÉCENTES</p><div class="stationi-card stationi-soft-card">${menuRow("clock-3", "Jardin d’Essai", "Hamma")}${menuRow("clock-3", "Sidi Yahia", "Hydra")}${menuRow("home", "Maison", "El Biar")}</div><button class="stationi-secondary stationi-block" style="margin-top:18px" type="button">Choisir sur la carte</button></div></main>${nav("map")}`
+        },
+        {
+          slug: "06-filters",
+          title: "Filtres",
+          body: () => `<main class="stationi-main"><div class="stationi-scroll">${header("Filtres", "12 PARKINGS", "rotate-ccw", true)}<p class="stationi-eyebrow">DISPONIBILITÉ</p><div class="stationi-chip-row"><span class="stationi-chip selected">${icon("circle-check")} Maintenant</span><span class="stationi-chip">Dans 30 min</span><span class="stationi-chip">Réservable</span></div><div class="stationi-divider"></div><div class="stationi-row-between"><div><strong>Prix maximum</strong><p class="stationi-small">Par heure</p></div><span class="stationi-value stationi-purple-text">150 DA</span></div><div class="stationi-range"></div><div class="stationi-row-between stationi-caption"><span>50 DA</span><span>300 DA</span></div><div class="stationi-divider"></div><p class="stationi-eyebrow">ÉQUIPEMENTS</p><div class="stationi-chip-row"><span class="stationi-chip selected">${icon("warehouse")} Couvert</span><span class="stationi-chip selected">${icon("accessibility")} Accès PMR</span><span class="stationi-chip">${icon("zap")} Recharge</span><span class="stationi-chip">${icon("shield-check")} Gardé</span><span class="stationi-chip">${icon("camera") } Vidéo</span></div><div class="stationi-divider"></div><div class="stationi-row-between"><span><strong>Hauteur minimum</strong><span class="stationi-small" style="display:block">Pour SUV et utilitaires</span></span><strong>2,10 m</strong></div><div class="stationi-row-between" style="margin-top:18px"><span><strong>Ouvert maintenant</strong><span class="stationi-small" style="display:block">Inclure uniquement les parkings ouverts</span></span><span class="stationi-toggle on"></span></div><button class="stationi-primary stationi-block" style="margin-top:28px" type="button">Afficher 12 parkings</button></div></main>${nav("map")}`
+        },
+        {
+          slug: "07-results",
+          title: "Liste des parkings",
+          body: () => `<main class="stationi-main"><div class="stationi-scroll">${header("Parkings proches", "ALGER CENTRE", "map", true)}<div class="stationi-chip-row" style="margin-bottom:14px"><span class="stationi-chip selected">Disponibles</span><span class="stationi-chip">Prix</span><span class="stationi-chip">Distance</span></div><div class="stationi-card">${parkingRow("Parking Grande Poste", "4 min · 4,8 ★ · Couvert", "120 DA/h")}<div class="stationi-divider"></div><div class="stationi-row-between"><span class="stationi-small">34 places libres</span><button class="stationi-primary" style="min-height:38px;border-radius:11px;padding:0 14px" type="button">Voir</button></div></div><div class="stationi-card">${parkingRow("Didouche Mourad", "7 min · 4,6 ★ · Gardé", "100 DA/h")}<div class="stationi-divider"></div><div class="stationi-row-between"><span class="stationi-small">18 places libres</span><button class="stationi-secondary" style="min-height:38px;border-radius:11px;padding:0 14px" type="button">Voir</button></div></div><div class="stationi-card">${parkingRow("Les Sablettes", "11 min · 4,5 ★ · Extérieur", "80 DA/h")}<div class="stationi-divider"></div><div class="stationi-row-between"><span class="stationi-small">64 places libres</span><button class="stationi-secondary" style="min-height:38px;border-radius:11px;padding:0 14px" type="button">Voir</button></div></div></div></main>${nav("map")}`
+        },
+        {
+          slug: "08-parking-details",
+          title: "Détails parking",
+          body: () => `<main class="stationi-main"><div class="stationi-detail-hero"><div class="stationi-detail-lines"></div><button class="stationi-icon-button" style="position:absolute;left:18px;top:18px;z-index:2" type="button" aria-label="Retour">${icon("chevron-left")}</button><button class="stationi-icon-button" style="position:absolute;right:18px;top:18px;z-index:2" type="button" aria-label="Favori">${icon("heart")}</button><div class="stationi-detail-badge">${icon("camera")} Occupation actualisée à l’instant</div></div><div class="stationi-scroll" style="height:526px"><div class="stationi-row-between"><div><p class="stationi-eyebrow">ALGER CENTRE</p><h1 class="stationi-section-title">Parking Grande Poste</h1></div><div class="stationi-price">120 DA/h</div></div><div class="stationi-row-between" style="margin:11px 0"><span class="stationi-availability">34 places libres</span><span class="stationi-small">4,8 ★ · 326 avis</span></div><div class="stationi-chip-row"><span class="stationi-chip">${icon("clock-3")} 24 h/24</span><span class="stationi-chip">${icon("warehouse")} Couvert</span><span class="stationi-chip">${icon("accessibility")} PMR</span><span class="stationi-chip">${icon("shield-check")} Gardé</span></div><div class="stationi-divider"></div><div class="stationi-grid-2"><div class="stationi-card stationi-soft-card"><p class="stationi-caption">JOURNÉE</p><strong>650 DA max.</strong></div><div class="stationi-card stationi-soft-card" style="margin-top:0"><p class="stationi-caption">HAUTEUR</p><strong>2,10 m</strong></div></div><div class="stationi-notice" style="margin-top:12px">${icon("scan-line")}<span><strong>Accès automatique</strong><span class="stationi-small" style="display:block">Votre plaque ouvre la barrière.</span></span></div><button class="stationi-primary stationi-block" style="margin-top:14px" type="button">Réserver une place</button></div></main>${nav("map")}`
+        },
+        {
+          slug: "09-live-availability",
+          title: "Places en direct",
+          body: () => `<main class="stationi-main"><div class="stationi-scroll">${header("Places en direct", "GRANDE POSTE", "info", true)}<div class="stationi-segmented"><button class="active">Niveau −1</button><button>Niveau −2</button><button>Terrasse</button></div><div class="stationi-row-between" style="margin:18px 0"><div><span class="stationi-availability">14 places libres</span><p class="stationi-small">Zone A · proche de la sortie</p></div><span class="stationi-chip selected">Temps réel</span></div><div class="stationi-bay-grid"><span class="stationi-bay">A-21</span><span class="stationi-bay busy">A-22</span><span class="stationi-bay">A-23</span><span class="stationi-bay busy">A-24</span><span class="stationi-bay">A-25</span><span class="stationi-bay">A-26</span><span class="stationi-bay selected">A-27</span><span class="stationi-bay busy">A-28</span><span class="stationi-bay busy">A-29</span><span class="stationi-bay">A-30</span><span class="stationi-bay">A-31</span><span class="stationi-bay">A-32</span></div><div class="stationi-card" style="margin-top:18px"><div class="stationi-row-between"><div><p class="stationi-eyebrow">PLACE SÉLECTIONNÉE</p><strong>A-27</strong><p class="stationi-small">2e rangée · 28 m de la sortie</p></div><span class="stationi-place-icon">${icon("car-front")}</span></div><div class="stationi-divider"></div><div class="stationi-row-between"><span class="stationi-small">Capteur vérifié il y a 12 s</span><span class="stationi-green-text">Libre</span></div></div><button class="stationi-primary stationi-block" style="margin-top:16px" type="button">Choisir A-27</button></div></main>${nav("map")}`
+        },
+        {
+          slug: "10-date-duration",
+          title: "Date et durée",
+          body: () => `<main class="stationi-main"><div class="stationi-scroll">${header("Date et durée", "RÉSERVATION", "calendar-days", true)}<div class="stationi-card stationi-time-card"><p class="stationi-eyebrow">ARRIVÉE</p><div class="stationi-time">Aujourd’hui · 14:30</div><p class="stationi-small">Parking Grande Poste</p></div><p class="stationi-eyebrow" style="margin-top:20px">DURÉE ESTIMÉE</p><div class="stationi-stepper"><button type="button">−</button><div class="stationi-card stationi-soft-card" style="margin:0;text-align:center;padding:10px"><span class="stationi-value">2 h 00</span><span class="stationi-small" style="display:block">Départ à 16:30</span></div><button type="button">+</button></div><div class="stationi-chip-row" style="margin-top:12px"><span class="stationi-chip">30 min</span><span class="stationi-chip">1 h</span><span class="stationi-chip selected">2 h</span><span class="stationi-chip">4 h</span></div><div class="stationi-divider"></div><div class="stationi-card"><div class="stationi-row-between"><div><p class="stationi-eyebrow">VÉHICULE</p><strong>Renault Clio</strong><p class="stationi-small">Plaque •••• 16 · principal</p></div><button class="stationi-ghost" type="button">Changer</button></div></div><div class="stationi-row-between" style="margin-top:24px"><span><strong>Estimation</strong><span class="stationi-small" style="display:block">2 h × 120 DA</span></span><span class="stationi-value">240 DA</span></div><button class="stationi-primary stationi-block" style="margin-top:20px" type="button">Continuer</button></div></main>${nav("map")}`
+        },
+        {
+          slug: "11-vehicle",
+          title: "Véhicule et plaque",
+          body: () => `<main class="stationi-main"><div class="stationi-scroll">${header("Choisir un véhicule", "ACCÈS PAR PLAQUE", "plus", true)}<div class="stationi-card stationi-vehicle selected"><div class="stationi-row"><span class="stationi-vehicle-shape"></span><div class="stationi-grow"><strong>Renault Clio</strong><p class="stationi-small">Gris · 00116-116-16</p><span class="stationi-chip selected" style="min-height:26px;margin-top:6px">Principal</span></div><span class="stationi-check">${icon("check")}</span></div></div><div class="stationi-card stationi-vehicle"><div class="stationi-row"><span class="stationi-vehicle-shape" style="background:linear-gradient(145deg,#444,#111)"></span><div class="stationi-grow"><strong>Peugeot 208</strong><p class="stationi-small">Noir · 00123-118-16</p></div><span class="stationi-icon-button" style="width:34px;height:34px;flex-basis:34px;box-shadow:none">${icon("pencil")}</span></div></div><div class="stationi-notice" style="margin-top:16px">${icon("scan-line")}<span><strong>Vérifiez votre plaque.</strong><span class="stationi-small" style="display:block">Elle sera lue automatiquement à l’entrée.</span></span></div><p class="stationi-eyebrow" style="margin-top:20px">AJOUT RAPIDE</p><div class="stationi-input"><label>Numéro d’immatriculation</label><strong>00116 — 116 — 16</strong></div><div class="stationi-grid-2" style="margin-top:10px"><div class="stationi-input"><label>Marque</label><strong>Renault</strong></div><div class="stationi-input"><label>Modèle</label><strong>Clio</strong></div></div><button class="stationi-primary stationi-block" style="margin-top:18px" type="button">Utiliser ce véhicule</button></div></main>${nav("profile")}`
+        },
+        {
+          slug: "12-checkout",
+          title: "Paiement",
+          body: () => `<main class="stationi-main"><div class="stationi-scroll">${header("Vérifier et payer", "PAIEMENT SÉCURISÉ", "shield-check", true)}<div class="stationi-card"><p class="stationi-eyebrow">RÉSERVATION</p><div class="stationi-row-between"><strong>Parking Grande Poste</strong><span class="stationi-chip">2 h</span></div><p class="stationi-small">Aujourd’hui · 14:30 → 16:30</p><div class="stationi-divider"></div><div class="stationi-row-between"><span class="stationi-body">Stationnement</span><strong>240 DA</strong></div><div class="stationi-row-between" style="margin-top:8px"><span class="stationi-body">Frais de réservation</span><strong>30 DA</strong></div><div class="stationi-total"><span>Total</span><span class="stationi-value">270 DA</span></div></div><p class="stationi-eyebrow" style="margin-top:20px">MOYEN DE PAIEMENT</p><div class="stationi-card"><div class="stationi-row"><span class="stationi-payment-logo">CIB</span><div class="stationi-grow"><strong>CIB •••• 4242</strong><p class="stationi-small">Expire 08/28</p></div><span class="stationi-check">${icon("check")}</span></div><div class="stationi-divider"></div><div class="stationi-row"><span class="stationi-payment-logo">ED</span><div class="stationi-grow"><strong>Edahabia •••• 1908</strong><p class="stationi-small">Carte enregistrée</p></div>${icon("chevron-right")}</div></div><div class="stationi-row-between" style="margin-top:18px"><span><strong>Utiliser mon solde</strong><span class="stationi-small" style="display:block">1 250 DA disponibles</span></span><span class="stationi-toggle"></span></div><button class="stationi-primary stationi-block" style="margin-top:24px" type="button">${icon("lock-keyhole")} Payer 270 DA</button></div></main>${nav("timer")}`
+        },
+        {
+          slug: "13-confirmation",
+          title: "Confirmation + QR",
+          noNav: true,
+          body: () => `<main class="stationi-main"><div class="stationi-scroll" style="text-align:center;padding-top:24px"><div class="stationi-success-orb">${icon("check")}</div><h1 class="stationi-screen-title">Votre place<br>est réservée</h1><p class="stationi-body" style="margin-top:9px">Entrée automatique par lecture de plaque.</p><div style="margin:22px 0 14px">${qr()}</div><p class="stationi-eyebrow">PASS D’ACCÈS</p><strong>ST-240816-1842</strong><div class="stationi-card" style="text-align:left;margin-top:18px"><div class="stationi-row-between"><span class="stationi-small">Parking</span><strong>Grande Poste</strong></div><div class="stationi-row-between" style="margin-top:8px"><span class="stationi-small">Arrivée</span><strong>14:30</strong></div><div class="stationi-row-between" style="margin-top:8px"><span class="stationi-small">Véhicule</span><strong>Renault Clio · …16</strong></div></div><button class="stationi-primary stationi-block" style="margin-top:16px" type="button">Itinéraire vers l’entrée</button><div class="stationi-grid-2" style="margin-top:10px"><button class="stationi-secondary" type="button">${icon("calendar-plus")} Calendrier</button><button class="stationi-secondary" type="button">${icon("share-2")} Partager</button></div></div></main>`
+        },
+        {
+          slug: "14-route-preview",
+          title: "Aperçu itinéraire",
+          body: () => `<main class="stationi-main">${mapBase(`<div class="stationi-map-top"><div class="stationi-row-between"><button class="stationi-icon-button" type="button" aria-label="Retour">${icon("chevron-left")}</button><button class="stationi-icon-button" type="button" aria-label="Options">${icon("ellipsis")}</button></div></div><div class="stationi-map-sheet"><div class="stationi-sheet-handle"></div><div class="stationi-row-between"><div><p class="stationi-eyebrow">ITINÉRAIRE</p><strong>Parking Grande Poste</strong><p class="stationi-small">1,4 km · environ 6 min</p></div><span class="stationi-place-icon">${icon("navigation")}</span></div><div class="stationi-divider"></div><div class="stationi-row-between"><span class="stationi-small">Boulevard Zighoud Youcef</span><span class="stationi-chip selected">Trafic fluide</span></div><button class="stationi-primary stationi-block" style="margin-top:14px" type="button">Démarrer</button></div>`, {route:true})}</main>${nav("map")}`
+        },
+        {
+          slug: "15-navigation",
+          title: "Navigation + arrivée",
+          body: () => `<main class="stationi-main">${mapBase(`<div class="stationi-nav-banner"><div class="stationi-row"><span class="stationi-direction-icon">${icon("corner-up-right")}</span><div class="stationi-grow"><p class="stationi-eyebrow">DANS 80 M</p><strong>Tournez à droite</strong><p class="stationi-small">Entrée parking · voie de service</p></div></div></div><div class="stationi-map-sheet"><div class="stationi-row-between"><div><p class="stationi-eyebrow">ARRIVÉE</p><strong>3 min · 620 m</strong><p class="stationi-small">Plaque reconnue automatiquement</p></div><button class="stationi-icon-button" type="button" aria-label="Muet">${icon("volume-x")}</button></div><div class="stationi-notice" style="margin-top:12px">${icon("camera")}<span class="stationi-small">Cherchez le panneau STATIONI à l’entrée Est.</span></div></div>`, {route:true})}</main>${nav("map")}`
+        },
+        {
+          slug: "16-active-timer",
+          title: "Minuteur actif",
+          body: () => `<main class="stationi-main"><div class="stationi-scroll">${header("Stationnement en cours", "GRANDE POSTE", "more-horizontal", false)}<div class="stationi-timer-wrap"><svg viewBox="0 0 250 250" aria-hidden="true"><circle cx="125" cy="125" r="105" fill="none" stroke="var(--stationi-border)" stroke-width="13"></circle><circle cx="125" cy="125" r="105" fill="none" stroke="var(--stationi-purple)" stroke-width="13" stroke-linecap="round" stroke-dasharray="659" stroke-dashoffset="184"></circle></svg><div class="stationi-timer-content"><p class="stationi-eyebrow">TEMPS RESTANT</p><div class="stationi-timer-number">01:12:43</div><p class="stationi-small">Fin prévue à 16:30</p></div></div><div class="stationi-grid-2"><div class="stationi-card stationi-soft-card"><p class="stationi-caption">PLACE</p><strong>A-27</strong><p class="stationi-small">Niveau −1</p></div><div class="stationi-card stationi-soft-card" style="margin-top:0"><p class="stationi-caption">MONTANT</p><strong>270 DA</strong><p class="stationi-small">Payé</p></div></div><div class="stationi-notice" style="margin-top:12px">${icon("scan-line")}<span><strong>Plaque reconnue à 14:31</strong><span class="stationi-small" style="display:block">Votre session a démarré automatiquement.</span></span></div><button class="stationi-primary stationi-block" style="margin-top:16px" type="button">${icon("clock-plus")} Prolonger</button><div class="stationi-grid-2" style="margin-top:10px"><button class="stationi-secondary" type="button">${icon("locate-fixed")} Ma voiture</button><button class="stationi-secondary" type="button">${icon("square")} Terminer</button></div></div></main>${nav("timer", true)}`
+        },
+        {
+          slug: "17-extend-session",
+          title: "Prolonger",
+          body: () => `<main class="stationi-main"><div class="stationi-scroll">${header("Prolonger", "SESSION EN COURS", "clock-3", true)}<div class="stationi-notice">${icon("info")}<span><strong>Disponible jusqu’à 18:00</strong><span class="stationi-small" style="display:block">Le parking ferme l’accès aux réservations après.</span></span></div><p class="stationi-eyebrow" style="margin-top:24px">AJOUTER DU TEMPS</p><div class="stationi-grid-2"><div class="stationi-card stationi-soft-card" style="text-align:center"><strong>+30 min</strong><p class="stationi-small">60 DA</p></div><div class="stationi-card" style="text-align:center;margin-top:0;border-color:var(--stationi-purple)"><strong class="stationi-purple-text">+1 h</strong><p class="stationi-small">120 DA</p></div><div class="stationi-card stationi-soft-card" style="text-align:center"><strong>+2 h</strong><p class="stationi-small">240 DA</p></div><div class="stationi-card stationi-soft-card" style="text-align:center;margin-top:10px"><strong>Personnalisé</strong><p class="stationi-small">Choisir</p></div></div><div class="stationi-card" style="margin-top:18px"><div class="stationi-row-between"><span class="stationi-small">Nouvelle fin</span><strong>17:30</strong></div><div class="stationi-row-between" style="margin-top:9px"><span class="stationi-small">Temps ajouté</span><strong>1 h 00</strong></div><div class="stationi-total"><span>À payer</span><span class="stationi-value">120 DA</span></div></div><button class="stationi-primary stationi-block" style="margin-top:18px" type="button">Prolonger jusqu’à 17:30</button><button class="stationi-ghost stationi-block" type="button">Garder 16:30</button></div></main>${nav("timer", true)}`
+        },
+        {
+          slug: "18-receipt",
+          title: "Reçu de session",
+          body: () => `<main class="stationi-main"><div class="stationi-scroll">${header("Stationnement terminé", "REÇU", "share-2", true)}<div class="stationi-success-orb" style="width:70px;height:70px">${icon("check")}</div><div style="text-align:center"><h1 class="stationi-screen-title">Merci, Amine</h1><p class="stationi-body">Votre sortie a été confirmée à 16:25.</p></div><div class="stationi-card" style="margin-top:20px"><div class="stationi-row-between"><span class="stationi-small">Parking</span><strong>Grande Poste</strong></div><div class="stationi-divider"></div><div class="stationi-row-between"><span class="stationi-small">Entrée</span><strong>14:31</strong></div><div class="stationi-row-between" style="margin-top:8px"><span class="stationi-small">Sortie</span><strong>16:25</strong></div><div class="stationi-row-between" style="margin-top:8px"><span class="stationi-small">Durée réelle</span><strong>1 h 54 min</strong></div><div class="stationi-row-between" style="margin-top:8px"><span class="stationi-small">Véhicule</span><strong>Renault Clio · …16</strong></div><div class="stationi-total"><span>Total payé</span><span class="stationi-value">270 DA</span></div></div><button class="stationi-primary stationi-block" style="margin-top:16px" type="button">${icon("download")} Télécharger le reçu</button><button class="stationi-secondary stationi-block" style="margin-top:10px" type="button">Réserver à nouveau</button></div></main>${nav("activity")}`
+        },
+        {
+          slug: "19-rating-issue",
+          title: "Avis et incident",
+          body: () => `<main class="stationi-main"><div class="stationi-scroll">${header("Votre avis", "GRANDE POSTE", "x", true)}<div style="text-align:center;margin-top:12px"><h1 class="stationi-screen-title">Comment s’est passé<br>votre stationnement ?</h1><p class="stationi-body" style="margin-top:8px">Votre retour aide les autres conducteurs.</p></div><div class="stationi-stars"><button type="button" aria-label="1 étoile">${icon("star")}</button><button type="button" aria-label="2 étoiles">${icon("star")}</button><button type="button" aria-label="3 étoiles">${icon("star")}</button><button type="button" aria-label="4 étoiles">${icon("star")}</button><button type="button" aria-label="5 étoiles">${icon("star")}</button></div><p class="stationi-eyebrow">CE QUI VOUS A PLU</p><div class="stationi-chip-row"><span class="stationi-chip selected">Accès facile</span><span class="stationi-chip selected">Places indiquées</span><span class="stationi-chip">Propreté</span><span class="stationi-chip selected">Paiement rapide</span><span class="stationi-chip">Sécurité</span></div><div class="stationi-input" style="margin-top:18px;min-height:90px;align-content:start"><label>Ajouter un commentaire</label><span class="stationi-small">Partagez un détail utile…</span></div><button class="stationi-primary stationi-block" style="margin-top:14px" type="button">Publier mon avis</button><div class="stationi-divider"></div><button class="stationi-secondary stationi-block stationi-red-text" type="button">${icon("triangle-alert")} Signaler un problème</button><p class="stationi-caption" style="text-align:center;margin-top:8px">Barrière bloquée · Place occupée · Éclairage</p></div></main>${nav("activity")}`
+        },
+        {
+          slug: "20-favorites",
+          title: "Favoris",
+          body: () => `<main class="stationi-main"><div class="stationi-scroll">${header("Mes favoris", "3 PARKINGS", "search", false)}<div class="stationi-card">${parkingRow("Sidi Yahia", "Hydra · 5 min · 4,9 ★", "150 DA/h")}<div class="stationi-divider"></div><div class="stationi-row-between"><span class="stationi-availability">21 libres</span><button class="stationi-primary" style="min-height:38px;padding:0 14px" type="button">Réserver</button></div></div><div class="stationi-card">${parkingRow("Bab Ezzouar Centre", "10 min · Couvert · 4,7 ★", "100 DA/h")}<div class="stationi-divider"></div><div class="stationi-row-between"><span class="stationi-availability">87 libres</span><button class="stationi-secondary" style="min-height:38px;padding:0 14px" type="button">Voir</button></div></div><div class="stationi-card">${parkingRow("Les Sablettes", "Front de mer · 4,5 ★", "80 DA/h")}<div class="stationi-divider"></div><div class="stationi-row-between"><span class="stationi-availability">64 libres</span><button class="stationi-secondary" style="min-height:38px;padding:0 14px" type="button">Voir</button></div></div><button class="stationi-ghost stationi-block" style="margin-top:16px" type="button">Découvrir d’autres parkings</button></div></main>${nav("heart")}`
+        },
+        {
+          slug: "21-activity",
+          title: "Réservations + historique",
+          body: () => `<main class="stationi-main"><div class="stationi-scroll">${header("Mon activité", "RÉSERVATIONS", "download", false)}<div class="stationi-segmented"><button>À venir</button><button>En cours</button><button class="active">Passées</button></div><p class="stationi-eyebrow" style="margin-top:20px">AOÛT 2026</p><div class="stationi-card">${parkingRow("Parking Sidi Yahia", "12 août · 2 h 00", "300 DA", "receipt-text", "Terminée")}<div class="stationi-divider"></div><div class="stationi-row-between"><span class="stationi-small">Reçu ST-1218</span><button class="stationi-ghost" style="min-height:34px" type="button">Réserver encore</button></div></div><div class="stationi-card">${parkingRow("Jardin d’Essai", "8 août · 1 h 30", "135 DA", "receipt-text", "Terminée")}<div class="stationi-divider"></div><div class="stationi-row-between"><span class="stationi-small">Reçu ST-1182</span><button class="stationi-ghost" style="min-height:34px" type="button">Voir le reçu</button></div></div><p class="stationi-eyebrow" style="margin-top:20px">JUILLET 2026</p><div class="stationi-card stationi-soft-card">${parkingRow("Port d’Alger", "29 juil. · 3 h 12", "320 DA", "receipt-text", "Terminée")}</div></div></main>${nav("activity")}`
+        },
+        {
+          slug: "22-notifications",
+          title: "Notifications",
+          body: () => `<main class="stationi-main"><div class="stationi-scroll">${header("Notifications", "4 NOUVELLES", "check-check", true)}<div class="stationi-card"><div class="stationi-row"><span class="stationi-permission-icon">${icon("timer")}</span><div class="stationi-grow"><strong>Fin dans 15 minutes</strong><p class="stationi-small">Prolongez votre session à Grande Poste sans retourner au véhicule.</p><p class="stationi-caption" style="margin-top:5px">Il y a 2 min</p></div><span class="stationi-live-dot" style="position:static;box-shadow:none"></span></div></div><div class="stationi-card"><div class="stationi-row"><span class="stationi-permission-icon">${icon("scan-line")}</span><div class="stationi-grow"><strong>Entrée confirmée</strong><p class="stationi-small">Votre plaque a été reconnue à 14:31.</p><p class="stationi-caption" style="margin-top:5px">Aujourd’hui</p></div></div></div><div class="stationi-card"><div class="stationi-row"><span class="stationi-permission-icon">${icon("receipt-text")}</span><div class="stationi-grow"><strong>Reçu disponible</strong><p class="stationi-small">Votre reçu de 270 DA est prêt.</p><p class="stationi-caption" style="margin-top:5px">12 août</p></div></div></div><div class="stationi-card stationi-soft-card"><div class="stationi-row"><span class="stationi-permission-icon">${icon("tag")}</span><div class="stationi-grow"><strong>Tarif mis à jour</strong><p class="stationi-small">Sidi Yahia passe à 150 DA/h après 18:00.</p><p class="stationi-caption" style="margin-top:5px">Hier</p></div></div></div></div></main>${nav("profile")}`
+        },
+        {
+          slug: "23-profile-wallet",
+          title: "Profil + portefeuille",
+          body: () => `<main class="stationi-main"><div class="stationi-scroll">${header("Mon profil", "BONJOUR AMINE", "settings", false)}<div class="stationi-row" style="margin-bottom:16px"><span class="stationi-avatar">AM</span><div class="stationi-grow"><strong>Amine B.</strong><p class="stationi-small">+213 5 50 24 18 42</p></div><button class="stationi-ghost" type="button">Modifier</button></div><div class="stationi-card stationi-wallet"><p class="stationi-small">Solde STATIONI</p><div class="stationi-row-between" style="margin-top:5px"><span class="stationi-value" style="font-size:34px">1 250 DA</span>${mark(30, "on-gradient")}</div><button class="stationi-secondary" style="margin-top:14px;min-height:42px;background:#fff;color:#111016" type="button">Ajouter du crédit</button></div><div class="stationi-card" style="margin-top:14px">${menuRow("credit-card", "Moyens de paiement", "CIB •••• 4242")}${menuRow("car-front", "Mes véhicules", "2 véhicules")}${menuRow("receipt-text", "Factures et reçus", "12 documents")}${menuRow("ticket-percent", "Ajouter un code", "Promotion ou entreprise")}</div><div class="stationi-card stationi-soft-card" style="margin-top:12px">${menuRow("crown", "Pass STATIONI", "Économisez sur vos parkings")}</div></div></main>${nav("profile")}`
+        },
+        {
+          slug: "24-settings-support",
+          title: "Réglages + assistance",
+          body: () => `<main class="stationi-main"><div class="stationi-scroll">${header("Réglages", "PRÉFÉRENCES", "headphones", true)}<p class="stationi-eyebrow">APPARENCE ET LANGUE</p><div class="stationi-card">${menuRow("sun-moon", "Apparence", "Système · Clair · Sombre")}${menuRow("languages", "Langue", "Français · العربية")}${menuRow("bell-ring", "Alertes de fin", "15 min avant", "toggle")}</div><p class="stationi-eyebrow" style="margin-top:20px">CONFIDENTIALITÉ</p><div class="stationi-card">${menuRow("locate-fixed", "Localisation", "Pendant l’utilisation")}${menuRow("shield-check", "Confidentialité", "Données et autorisations")}${menuRow("scan-line", "Lecture de plaque", "Activée", "toggle")}</div><p class="stationi-eyebrow" style="margin-top:20px">ASSISTANCE</p><div class="stationi-card">${menuRow("message-circle", "Démarrer une conversation", "Réponse estimée : 2 min")}${menuRow("circle-help", "Centre d’aide", "Paiement, accès, réservation")}${menuRow("triangle-alert", "Problème d’entrée ou de sortie", "Assistance prioritaire")}</div><button class="stationi-ghost stationi-block stationi-red-text" style="margin-top:12px" type="button">Supprimer mon compte</button></div></main>${nav("profile")}`
+        }
+      ];
+
+      const picker = root.querySelector("[data-prototype-picker]");
+      const previousButton = root.querySelector("[data-prototype-prev]");
+      const nextButton = root.querySelector("[data-prototype-next]");
+      const toastElement = root.querySelector(".prototype-toast");
+      const history = [];
+      let currentIndex = 0;
+      let sessionState = "idle";
+      let toastTimer;
+
+      picker.innerHTML = screens.map((screen, index) => `<option value="${index}">${String(index + 1).padStart(2, "0")} · ${screen.title}</option>`).join("");
+
+      const normalize = (value = "") => value.replace(/\s+/g, " ").trim();
+
+      const showToast = (message) => {
+        clearTimeout(toastTimer);
+        toastElement.textContent = message;
+        toastElement.classList.add("show");
+        toastTimer = setTimeout(() => toastElement.classList.remove("show"), 1900);
+      };
+
+      const render = () => {
+        const screen = screens[currentIndex];
+        grid.innerHTML = `<article class="stationi-frame"><div class="stationi-frame-label"><strong>${String(currentIndex + 1).padStart(2, "0")}. ${screen.title}</strong><span>${root.dataset.theme === "dark" ? "Sombre" : "Clair"}</span></div><section class="stationi-phone ${screen.noNav ? "no-nav" : ""}" data-screen-slug="${screen.slug}" aria-label="Écran ${screen.title} en mode ${root.dataset.theme === "dark" ? "sombre" : "clair"}">${status()}${screen.body()}</section></article>`;
+        picker.value = String(currentIndex);
+        previousButton.disabled = currentIndex === 0 && history.length === 0;
+        nextButton.disabled = currentIndex === screens.length - 1;
+        globalThis.lucide?.createIcons({ attrs: { width: 16, height: 16, "stroke-width": 1.8 } });
+        document.title = `${String(currentIndex + 1).padStart(2, "0")} · ${screen.title} — STATIONI`;
+      };
+
+      const navigate = (index, push = true) => {
+        const nextIndex = Math.max(0, Math.min(screens.length - 1, Number(index)));
+        if (nextIndex === currentIndex) return;
+        if (push) history.push(currentIndex);
+        currentIndex = nextIndex;
+        render();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      };
+
+      const goBack = () => {
+        if (history.length) navigate(history.pop(), false);
+        else navigate(Math.max(0, currentIndex - 1), false);
+      };
+
+      const applyTheme = (theme, persist = true) => {
+        root.dataset.theme = theme;
+        root.querySelectorAll("[data-stationi-theme]").forEach((candidate) => {
+          const active = candidate.dataset.stationiTheme === theme;
+          candidate.setAttribute("aria-pressed", String(active));
+          candidate.classList.toggle("btn-primary", active);
+        });
+        if (persist) localStorage.setItem("stationi-theme", theme);
+        render();
+      };
+
+      const sessionDestination = () => {
+        if (sessionState === "reserved") return 12;
+        if (sessionState === "navigating") return 14;
+        if (sessionState === "active") return 15;
+        if (sessionState === "completed") return 17;
+        return 20;
+      };
+
+      root.querySelectorAll("[data-stationi-theme]").forEach((button) => {
+        button.addEventListener("click", () => applyTheme(button.dataset.stationiTheme));
+      });
+
+      picker.addEventListener("change", () => navigate(Number(picker.value)));
+      previousButton.addEventListener("click", goBack);
+      nextButton.addEventListener("click", () => navigate(currentIndex + 1));
+
+      grid.addEventListener("focusin", (event) => {
+        if (currentIndex === 3 && event.target.matches(".stationi-search input")) navigate(4);
+      });
+
+      grid.addEventListener("click", (event) => {
+        if (event.target.closest("a")) return;
+
+        const button = event.target.closest("button");
+        const card = event.target.closest(".stationi-card");
+        const parkingRowElement = event.target.closest(".stationi-parking-row");
+        const menuRowElement = event.target.closest(".stationi-menu-row");
+        const navButton = event.target.closest(".stationi-nav button");
+        const label = normalize(button?.textContent || event.target.textContent || "");
+        const aria = button?.getAttribute("aria-label") || "";
+
+        const toggle = event.target.closest(".stationi-toggle");
+        if (toggle) {
+          toggle.classList.toggle("on");
+          showToast(toggle.classList.contains("on") ? "Option activée" : "Option désactivée");
+          return;
+        }
+
+        const bay = event.target.closest(".stationi-bay");
+        if (bay) {
+          if (bay.classList.contains("busy")) showToast("Cette place est occupée");
+          else {
+            grid.querySelectorAll(".stationi-bay").forEach((item) => item.classList.remove("selected"));
+            bay.classList.add("selected");
+            showToast(`${bay.textContent.trim()} sélectionnée`);
+          }
+          return;
+        }
+
+        const star = event.target.closest(".stationi-stars button");
+        if (star) {
+          const stars = [...grid.querySelectorAll(".stationi-stars button")];
+          const rating = stars.indexOf(star) + 1;
+          stars.forEach((item, index) => item.classList.toggle("selected", index < rating));
+          showToast(`${rating} étoile${rating > 1 ? "s" : ""}`);
+          return;
+        }
+
+        const segment = event.target.closest(".stationi-segmented button");
+        if (segment) {
+          segment.parentElement.querySelectorAll("button").forEach((item) => item.classList.toggle("active", item === segment));
+          showToast(`${normalize(segment.textContent)} sélectionné`);
+          return;
+        }
+
+        const chip = event.target.closest(".stationi-chip");
+        if (chip && !chip.closest(".stationi-map-sheet")) {
+          chip.classList.toggle("selected");
+          return;
+        }
+
+        if (navButton) {
+          const destination = { Carte: 3, Favoris: 19, Session: sessionDestination(), "Activité": 20, Profil: 22 }[aria];
+          if (destination !== undefined) navigate(destination);
+          return;
+        }
+
+        if (aria === "Retour") {
+          goBack();
+          return;
+        }
+
+        if (aria === "Menu") {
+          if (currentIndex === 22) navigate(21);
+          else showToast("Menu du prototype");
+          return;
+        }
+
+        if (aria === "Action") {
+          if (currentIndex === 4) navigate(3);
+          else if (currentIndex === 6) navigate(3);
+          else if (currentIndex === 19) navigate(4);
+          else if (currentIndex === 21) showToast("Toutes les notifications sont lues");
+          else if (currentIndex === 22) navigate(23);
+          else showToast("Action effectuée");
+          return;
+        }
+
+        if (currentIndex === 0 && button) navigate(1);
+        else if (currentIndex === 1 && label.includes("Recevoir le code")) navigate(2);
+        else if (currentIndex === 1 && label.includes("Renvoyer")) showToast("Nouveau code envoyé");
+        else if (currentIndex === 2 && (label.includes("Continuer") || label.includes("Configurer plus tard") || aria === "Fermer")) navigate(3);
+        else if (currentIndex === 3 && aria === "Filtres") navigate(5);
+        else if (currentIndex === 3 && aria === "Afficher la liste") navigate(6);
+        else if (currentIndex === 3 && (event.target.closest(".stationi-pin") || parkingRowElement)) navigate(7);
+        else if (currentIndex === 3 && aria === "Recentrer") showToast("Position recentrée sur Alger Centre");
+        else if (currentIndex === 4 && label.includes("Choisir sur la carte")) navigate(3);
+        else if (currentIndex === 4 && (parkingRowElement || card)) navigate(7);
+        else if (currentIndex === 5 && label.includes("Afficher 12 parkings")) navigate(6);
+        else if (currentIndex === 5 && aria === "Réinitialiser") showToast("Filtres réinitialisés");
+        else if (currentIndex === 6 && (label === "Voir" || parkingRowElement || card)) navigate(7);
+        else if (currentIndex === 7 && label.includes("Réserver une place")) navigate(8);
+        else if (currentIndex === 7 && aria === "Favori") showToast("Parking ajouté aux favoris");
+        else if (currentIndex === 8 && label.includes("Choisir")) navigate(9);
+        else if (currentIndex === 9 && label.includes("Changer")) navigate(10);
+        else if (currentIndex === 9 && label.includes("Continuer")) navigate(11);
+        else if (currentIndex === 10 && label.includes("Utiliser ce véhicule")) navigate(9);
+        else if (currentIndex === 10 && (label.includes("Renault") || label.includes("Peugeot"))) showToast("Véhicule sélectionné");
+        else if (currentIndex === 11 && label.includes("Payer")) {
+          sessionState = "reserved";
+          navigate(12);
+        }
+        else if (currentIndex === 11 && card) showToast("Moyen de paiement sélectionné");
+        else if (currentIndex === 12 && label.includes("Itinéraire")) {
+          sessionState = "navigating";
+          navigate(13);
+        }
+        else if (currentIndex === 12 && (label.includes("Calendrier") || label.includes("Partager"))) showToast(label.includes("Calendrier") ? "Ajouté au calendrier" : "Lien de réservation copié");
+        else if (currentIndex === 13 && label.includes("Démarrer")) navigate(14);
+        else if (currentIndex === 13 && aria === "Options") showToast("Options d’itinéraire");
+        else if (currentIndex === 14 && (card || event.target.closest(".stationi-map-sheet"))) {
+          sessionState = "active";
+          navigate(15);
+        }
+        else if (currentIndex === 14 && aria === "Muet") showToast("Guidage vocal désactivé");
+        else if (currentIndex === 15 && label.includes("Prolonger")) navigate(16);
+        else if (currentIndex === 15 && label.includes("Terminer")) {
+          sessionState = "completed";
+          navigate(17);
+        }
+        else if (currentIndex === 15 && label.includes("Ma voiture")) navigate(14);
+        else if (currentIndex === 16 && (label.includes("Prolonger jusqu") || label.includes("Garder 16:30"))) {
+          if (label.includes("Prolonger jusqu")) showToast("Session prolongée jusqu’à 17:30");
+          navigate(15);
+        }
+        else if (currentIndex === 16 && card) showToast("Durée de prolongation sélectionnée");
+        else if (currentIndex === 17 && label.includes("Réserver à nouveau")) navigate(9);
+        else if (currentIndex === 17 && (label.includes("Télécharger") || aria === "Action")) showToast("Reçu téléchargé");
+        else if (currentIndex === 18 && label.includes("Publier mon avis")) {
+          showToast("Merci, votre avis est publié");
+          setTimeout(() => navigate(20), 650);
+        }
+        else if (currentIndex === 18 && label.includes("Signaler un problème")) navigate(23);
+        else if (currentIndex === 19 && label === "Réserver") navigate(9);
+        else if (currentIndex === 19 && (label === "Voir" || parkingRowElement || card)) navigate(7);
+        else if (currentIndex === 19 && label.includes("Découvrir")) navigate(3);
+        else if (currentIndex === 20 && label.includes("Réserver encore")) navigate(9);
+        else if (currentIndex === 20 && (label.includes("Voir le reçu") || parkingRowElement || card)) navigate(17);
+        else if (currentIndex === 21 && card) {
+          const cards = [...grid.querySelectorAll(".stationi-card")];
+          navigate([16, 15, 17, 7][Math.max(0, cards.indexOf(card))] ?? 15);
+        }
+        else if (currentIndex === 22 && menuRowElement) {
+          if (label.includes("Mes véhicules")) navigate(10);
+          else if (label.includes("Factures")) navigate(20);
+          else if (label.includes("Moyens de paiement")) navigate(11);
+          else showToast(`${label.split("\n")[0]} ouvert`);
+        }
+        else if (currentIndex === 22 && (label.includes("Modifier") || label.includes("Ajouter du crédit"))) showToast(label.includes("Modifier") ? "Profil prêt à être modifié" : "Recharge du solde ouverte");
+        else if (currentIndex === 23 && menuRowElement) {
+          if (label.includes("Apparence")) applyTheme(root.dataset.theme === "dark" ? "light" : "dark");
+          else showToast(`${normalize(menuRowElement.querySelector("strong")?.textContent || "Option")} ouvert`);
+        }
+        else if (currentIndex === 23 && label.includes("Supprimer mon compte")) showToast("Action désactivée dans le prototype");
+        else if (button) showToast("Interaction disponible dans le prototype final");
+      });
+
+      document.addEventListener("keydown", (event) => {
+        if (event.target.matches("input, select, textarea")) return;
+        if (event.key === "ArrowRight") navigate(currentIndex + 1);
+        if (event.key === "ArrowLeft" || event.key === "Escape") goBack();
+      });
+
+      const savedTheme = localStorage.getItem("stationi-theme");
+      applyTheme(savedTheme === "dark" ? "dark" : "light", false);
+    })();
+  </script>
+</div>
+</body>
+</html>
